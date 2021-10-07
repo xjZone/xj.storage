@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<script>document.write('<script charset="utf-8" src="../dist/xj.storage.js?timeStamp='+ Date.now() +'"><\/script>')</script>
+<title>demo_06_sessionStorage_testEvent_iframe</title>
+</head>
+<body>
+
+
+
+<p>This is in iframe page<br />
+操作数据 || 解绑事件 || 删除列表 : <br />
+<button type="button" id="set">set</button>
+<button type="button" id="remove">remove</button>
+<button type="button" id="clear">clear</button> || 
+<button type="button" id="off">off</button> ||
+<button type="button" id="deleteList">deleteList</button></p>
+
+<!-- <iframe style="width:100%;height:256px;border:1px solid #ccc;" 
+src="./demo_06_sessionStorage_testEvent_iframe.html"></iframe> -->
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script>
+// 监听 sessionStorage 对象中 key 值为 testEvent 的数据变化
+var xjss = xj.storage.sessionStorage;
+xjss.on('testEvent', function(event){
+	$('body').append(
+		$('<div></div>')
+		.append('key='+ event.key)
+		.append('丨oldValue='+ event.oldValue)
+		.append('丨newValue='+ event.newValue)
+	);
+});
+
+// 点击按钮 改变 / 移除 / 清空 数据都会触发 Storage 事件
+$('#set').click(function(){ xjss.set('testEvent', xjss.get('testEvent')+1) });
+$('#remove').click(function(){ xjss.remove('testEvent') });
+$('#clear').click(function(){ xjss.clear() });
+
+ // 点击按钮解除对 testEvent 的监听，不再响应事件
+$('#off').click(function(){ xjss.off('testEvent') });
+
+// 点击按钮将生成的数据列表既 div 元素移除
+$('#deleteList').click(function(){ $('div').remove() });
+</script>
+
+
+
+</body>
+</html>
