@@ -1,4 +1,4 @@
-/** xj.storage(本地存储操作) | V0.2.0 | Apache Licence 2.0 | 2019-2021 © XJ.Chen | https://github.com/xjZone/xj.storage */
+/** xj.storage(本地存储操作) | V0.2.1 | Apache Licence 2.0 | 2019-2021 © XJ.Chen | https://github.com/xjZone/xj.storage */
 ;(function(global, factory){
 	if(typeof(define) === 'function' && (define.amd !== undefined || define.cmd !== undefined)){ define(factory) }
 	else if(typeof(module) !== 'undefined' && typeof(exports) === 'object'){ module.exports = factory() }
@@ -12,21 +12,21 @@
 var pub_global = (typeof(globalThis) !== 'undefined' ? globalThis : typeof(window) !== 'undefined' ? window : typeof(self) !== 'undefined' ? self : global);
 
 // public nothing, version, keyword
-var pub_nothing = function(){}, pub_version = '0.2.0', pub_keyword = 'storage';
+var pub_nothing = function(){}, pub_version = '0.2.1', pub_keyword = 'storage';
 
 // public config, advance set
 var pub_config = {
 	
-	// 操作出错后是否要在 Console 面板自动输出错误，默认为 true，但这可能导致 Console 面板满屏飘红造成干扰，如果不想输出错误浪费浏览器资源，或是错误信息干扰了你的调试，可以将这个参数改为 false
+	// 操作出错后是否要在 Console 面板输出错误，默认为 true，但这可能导致 Console 面板满屏飘红造成干扰，如果你不想输出错误浪费浏览器资源，可将参数改为 false
 	consoleError : true,
 	
-	// 插件使用 JSON 转存数据，使得 Storage 不再局限于只能存储字符串，但 JSON 无法存储 symbol 和 function，它们都会变成 undefined，JSON 解析 undefined 会出错，undefined2null 参数用于处理这问题
-	// 插件会将直接遭遇的 symbol, function, undefined 转为 null，但如果这些数据处于数组或对象中则不会进行任何处理，因为 JSON 会把数组中的这些数据都自动当作 null，而对象中的这些数据会被自动抛弃
+	// 插件使用 JSON 格式转存数据，使得存储不再局限于字符串，但 JSON 格式无法存储 symbol 和 function，它们都会变成 undefined，JSON 解析 undefined 时将会出错
+	// 该参数为 true 时，插件会自动将 symbol, function, undefined 转为 null，但它们在数组或对象中则不会被处理，在数组中总会转为 null，在对象中则会被自动抛弃
 	undefined2null : true,
 	
-	// 按照标准，Storage 事件不应该在操作数据的那个页面被响应，只有同源的其他页面才能响应，因为在操作数据的那个页面响应，可能会造成多个窗口问题，iframe 也可能会受到影响，但有些浏览器没遵循标准
-	// IE 和 Safari(MacOS) 会在所有页面触发 Storage 事件，其实在当前页面响应有时也会很方便，所以插件提供了 dispatchOriginal 参数，用于控制是否在操作数据的当前页面响应 Storage 事件，默认为 true
-	// 如果你还是希望标准化，Storage 事件不在操作数据的那个页面被响应，可将该参数设置为 false，此时 IE 和 Safari(MacOS) 在操作数据的那个页面也就不会响应事件了，其他浏览器也会保持默认的标准状态
+	// 按照标准 Storage 事件不应该在操作数据的页面被响应，只有同源的其他页面才能响应这个事件，这是因为在操作数据的页面响应容易出 BUG，但有些浏览器没遵循标准
+	// IE 和 Safari(MacOS) 会操作数据的页面也触发事件，其实在当前页面响应有时也会很方便，所以插件提供了该参数，用于控制是否在操作数据的页面响应，默认为 true
+	// 如果你还是希望标准化，Storage 事件不要在操作数据的页面被响应，可将该参数设置为 false，此时 IE 和 Safari(MacOS) 在操作数据的那个页面也就不会响应事件了
 	dispatchOriginal : true,
 	
 };
@@ -484,7 +484,7 @@ var returnObject = {
 	localStorage : pub_lsReturn, 
 	sessionStorage : pub_ssReturn, 
 };
-return returnObject;
+return pub_global.xj.storageReturn[pub_version] = returnObject;
 
 // xj.storage.localStorage 对象和 xj.storage.sessionStorage 对象上的属性与方法
 // {

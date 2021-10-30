@@ -16,7 +16,7 @@ assignees: ''
 Describe clearly what the error is and how to reproduce it. If you can, add screenshots.  
 
 **举例(For Example)**  
-一个足够简短且明晰的案例，能够重现你发现的错误，当然，你也可以选择使用 [CodePen](https://codepen.io/) 或者 [JSFiddle](https://jsfiddle.net/)。  
-A short and clear case that can reproduce the error you found, you can also choose to use [CodePen](https://codepen.io/) or [JSFiddle](https://jsfiddle.net/).  
+一个足够简短且明晰的案例，能够重现你发现的错误，当然，你也可以选择使用 [JSRun](http://jsrun.net/new) 或者 [CodePen](https://codepen.io/)。  
+A short and clear case that can reproduce the error you found, you can also choose to use [JSRun](http://jsrun.net/new) or [CodePen](https://codepen.io/).  
 
 

@@ -11,4 +11,11 @@
 
 **协议** : Apache 2.0
 
+<!--◇
+————
+
+**推荐阅读 :**  
+XJ.Chen - [localStorage 和 sessionStorage 的 20 个 BUG 与 8 个 Feature](https://juejin.cn/????)  
+◇-->
+
 

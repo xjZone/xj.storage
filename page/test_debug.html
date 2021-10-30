@@ -10,8 +10,8 @@
 <script src="https://cdn.jsdelivr.net/npm/fastclick@1.0.6/lib/fastclick.min.js"></script>
 <script>document.addEventListener('DOMContentLoaded', function(){FastClick.attach(document.body)},false);</script>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 
 <link id="prism-material-light" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prism-themes@1.7.0/themes/prism-material-light.css" />
 <link id="prism-okaidia" rel="alternate stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-okaidia.css" />
@@ -28,14 +28,14 @@
 <script src="../dist/xj.storage.js"></script>
 ◇-->
 
-<title>xj.storage_debug</title>
+<title>xj.storage debug</title>
 </head>
 <body style="font:16px/1.5 Iosevka,'Microsoft YaHei','Hiragino Sans GB';box-sizing:border-box;max-width:1024px;margin:0;padding:0 16px;">
 <style>@font-face{font-family:"Iosevka";src:local('Iosevka'), url("../static/font/iosevka/6.1.2/iosevka-fixed-regular.woff2") format("woff2"), url("../static/font/iosevka/6.1.2/iosevka-fixed-regular.woff") format("woff");}</style>
 
 
 
-<h1>xj.storage_debug</h1>
+<h1>xj.storage debug</h1>
 <hr />
 
 
@@ -701,25 +701,25 @@ $('#deleteList').click(function(){ $('div').remove() });
 
 <section>
 <h2>插件的全局配置 : xj.storageConfig</h2>
-<p>插件提供了全局配置，这些配置对 xj.storage.localStorage 对象和 xj.storage.sessionStorage 对象都会生效，需要注意的是预设得在引入插件前就设置好，否则插件加载并执行的时候找不到这个预设，就会认为预设不存在，并且版本号还要对得上，否则插件也不会理会，例如本页面使用的插件是 0.2.0 的版本，所以在 xj.storageConfig 对象后面跟着的就是 ['0.2.0']，版本匹配是考虑到多版本并存而设计的。</p>
+<p>插件提供了全局配置，这些配置对 xj.storage.localStorage 对象和 xj.storage.sessionStorage 对象都会生效，需要注意的是预设得在引入插件前就设置好，否则插件加载并执行的时候找不到这个预设，就会认为预设不存在，并且版本号还要对得上，否则插件也不会理会，例如本页面使用的插件是 0.2.1 的版本，所以在 xj.storageConfig 对象后面跟着的就是 ['0.2.1']，版本匹配是考虑到多版本并存而设计的。</p>
 
 <textarea class="xjDemo" xjDemo="{result:false, larger:true}">
 <script>
 // 中括号里的是版本号
 if(window.xj === undefined){ xj = {} };
 if(xj.storageConfig === undefined){ xj.storageConfig = {} };
-xj.storageConfig['0.2.0'] = {
+xj.storageConfig['0.2.1'] = {
 	
-	// 操作出错后是否要在 Console 面板自动输出错误，默认为 true，但这可能导致 Console 面板满屏飘红造成干扰，如果不想输出错误浪费浏览器资源，或是错误信息干扰了你的调试，可以将这个参数改为 false
+	// 操作出错后是否要在 Console 面板输出错误，默认为 true，但这可能导致 Console 面板满屏飘红造成干扰，如果你不想输出错误浪费浏览器资源，可将参数改为 false
 	consoleError : true,
 	
-	// 插件使用 JSON 转存数据，使得 Storage 不再局限于只能存储字符串，但 JSON 无法存储 symbol 和 function，它们都会变成 undefined，JSON 解析 undefined 会出错，undefined2null 参数用于处理这问题
-	// 插件会将直接遭遇的 symbol, function, undefined 转为 null，但如果这些数据处于数组或对象中则不会进行任何处理，因为 JSON 会把数组中的这些数据都自动当作 null，而对象中的这些数据会被自动抛弃
+	// 插件使用 JSON 格式转存数据，使得存储不再局限于字符串，但 JSON 格式无法存储 symbol 和 function，它们都会变成 undefined，JSON 解析 undefined 时将会出错
+	// 该参数为 true 时，插件会自动将 symbol, function, undefined 转为 null，但它们在数组或对象中则不会被处理，在数组中总会转为 null，在对象中则会被自动抛弃
 	undefined2null : true,
 	
-	// 按照标准，Storage 事件不应该在操作数据的那个页面被响应，只有同源的其他页面才能响应，因为在操作数据的那个页面响应，可能会造成多个窗口问题，iframe 也可能会受到影响，但有些浏览器没遵循标准
-	// IE 和 Safari(MacOS) 会在所有页面触发 Storage 事件，其实在当前页面响应有时也会很方便，所以插件提供了 dispatchOriginal 参数，用于控制是否在操作数据的当前页面响应 Storage 事件，默认为 true
-	// 如果你还是希望标准化，Storage 事件不在操作数据的那个页面被响应，可将该参数设置为 false，此时 IE 和 Safari(MacOS) 在操作数据的那个页面也就不会响应事件了，其他浏览器也会保持默认的标准状态
+	// 按照标准 Storage 事件不应该在操作数据的页面被响应，只有同源的其他页面才能响应这个事件，这是因为在操作数据的页面响应容易出 BUG，但有些浏览器没遵循标准
+	// IE 和 Safari(MacOS) 会操作数据的页面也触发事件，其实在当前页面响应有时也会很方便，所以插件提供了该参数，用于控制是否在操作数据的页面响应，默认为 true
+	// 如果你还是希望标准化，Storage 事件不要在操作数据的页面被响应，可将该参数设置为 false，此时 IE 和 Safari(MacOS) 在操作数据的那个页面也就不会响应事件了
 	dispatchOriginal : true,
 	
 };
@@ -749,13 +749,13 @@ xj.storageConfig['0.2.0'] = {
 
 <script>
 // 没使用 requirejs 或者 seajs 进行模块化处理时，可用全局中的 xj.storage 对象，否则是 require(['xj.storage'], function(xs){ console.log(xs) }) 这样了
-// 可在引入插件前，通过 xj.storageOption[0.2.0'] 进行全局配置，通过 xj.storageConfig[0.2.0'] 进行参数预设，注意中括号后面的版本号要和当前插件相同才行
+// 可在引入插件前，通过 xj.storageOption['0.2.1'] 进行全局配置，通过 xj.storageConfig['0.2.1'] 进行参数预设，注意中括号后的版本号要和当前插件版本相同
 // if(window.xj === undefined){ xj = {} };
 // if(xj.storageConfig === undefined){ xj.storageConfig = {} };
-// xj.storageConfig[0.2.0'] = { consoleError : true,, undefined2null : true, dispatchOriginal : true };
+// xj.storageConfig['0.2.1'] = { consoleError : true,, undefined2null : true, dispatchOriginal : true };
 </script>
 
-<script>document.write('<script charset="utf-8" src="../dist/xj.storage.js?timeStamp='+ Date.now() +'"><\/script>')</script>
+<script>document.write('<script src="../dist/xj.storage.js?timeStamp='+ Date.now() +'"><\/script>')</script>
 <script>
 // 简化两个对象，不写成 xj.ls 和 xj.ss 是因为这会污染规范的 xj 对象
 // var xjls = xj.storage.localStorage, xjss = xj.storage.sessionStorage;
