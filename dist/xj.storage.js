@@ -1,4 +1,4 @@
-/** xj.storage(本地存储操作) | V0.2.1 | Apache Licence 2.0 | 2019-2021 © XJ.Chen | https://github.com/xjZone/xj.storage */
+/** xj.storage(本地存储操作) | V0.2.2 | Apache Licence 2.0 | 2019-2022 © XJ.Chen | https://github.com/xjZone/xj.storage/ */
 ;(function(global, factory){
 	if(typeof(define) === 'function' && (define.amd !== undefined || define.cmd !== undefined)){ define(factory) }
 	else if(typeof(module) !== 'undefined' && typeof(exports) === 'object'){ module.exports = factory() }
@@ -12,7 +12,7 @@
 var pub_global = (typeof(globalThis) !== 'undefined' ? globalThis : typeof(window) !== 'undefined' ? window : typeof(self) !== 'undefined' ? self : global);
 
 // public nothing, version, keyword
-var pub_nothing = function(){}, pub_version = '0.2.1', pub_keyword = 'storage';
+var pub_nothing = function(){}, pub_version = '0.2.2', pub_keyword = 'storage';
 
 // public config, advance set
 var pub_config = {
@@ -74,11 +74,11 @@ var pub_ssReturn = { listener : [], };
 var pub_typeList = ['ls', 'ss'];
 
 // 用于检查数据是否是这个插件设置的
-var pub_id_check = /xj_storage_t\d{13,}_r\d{13,}/;
+var pub_id_check = /xjStorage_t-?\d+r\d{13,}/;
 
 // 当前页的标记，用于判断事件的起源
-var pub_id = 'xj_storage_t' + Date.now() +'_r' + (
-Math.random() +''+ String(Math.random())).replace(/0\./g, '').slice(0,13);
+var pub_id = 'xjStorage_t' + Date.now() +'r'+ 
+(Math.random() +''+ Math.random()).replace(/0\./g, '').slice(0, 13);
 
 
 
@@ -197,7 +197,7 @@ theReturn.get = function(key, defaultValue){
 
 
 // 设置内容，IE 和 SF(MacOS) 会在操作数据的页面也触发 Storage 事件，所以改造数据结构用 id 来规避
-// 数据结构为 {id:xj_storage_t13_r13, act:'new', data:data}，有 create set remove clear 四种操作 
+// 数据结构为 {id:xjStorage_-?t+r13+, act:'new', data:data}，有 create set remove clear 四种操作 
 theReturn.set = function(key, value){
 	
 	// 不支持或没传参数则返回，否则创建相关变量

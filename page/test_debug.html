@@ -403,10 +403,10 @@ xjls.clear();
 var xjls = xj.storage.localStorage;
 
 xjls.set('key01', 1);
-console.log( xjls.byte() );			//  <mark id="mark-byte-01">78</mark>
+console.log( xjls.byte() );			//  <mark id="mark-byte-01">76</mark>
 
 xjls.set('key02', 2);
-console.log( xjls.byte() );			//  <mark id="mark-byte-02">156</mark>
+console.log( xjls.byte() );			//  <mark id="mark-byte-02">152</mark>
 
 xjls.clear();
 console.log( xjls.byte() );			//  <mark id="mark-byte-03">0</mark>
@@ -421,10 +421,10 @@ $(function(){ setTimeout(function(){
 var xjls = xj.storage.localStorage;
 
 xjls.set('key01', 1);
-verify('mark-byte-01', xjls.byte(), 78 );
+verify('mark-byte-01', xjls.byte(), 76 );
 
 xjls.set('key02', 2);
-verify('mark-byte-02', xjls.byte(), 156 );
+verify('mark-byte-02', xjls.byte(), 152 );
 
 xjls.clear();
 verify('mark-byte-03', xjls.byte(), 0 );
@@ -701,14 +701,14 @@ $('#deleteList').click(function(){ $('div').remove() });
 
 <section>
 <h2>插件的全局配置 : xj.storageConfig</h2>
-<p>插件提供了全局配置，这些配置对 xj.storage.localStorage 对象和 xj.storage.sessionStorage 对象都会生效，需要注意的是预设得在引入插件前就设置好，否则插件加载并执行的时候找不到这个预设，就会认为预设不存在，并且版本号还要对得上，否则插件也不会理会，例如本页面使用的插件是 0.2.1 的版本，所以在 xj.storageConfig 对象后面跟着的就是 ['0.2.1']，版本匹配是考虑到多版本并存而设计的。</p>
+<p>插件提供了全局配置，这些配置对 xj.storage.localStorage 对象和 xj.storage.sessionStorage 对象都会生效，需要注意的是预设得在引入插件前就设置好，否则插件加载并执行的时候找不到这个预设，就会认为预设不存在，并且版本号还要对得上，否则插件也不会理会，例如本页面使用的插件是 0.2.2 的版本，所以在 xj.storageConfig 对象后面跟着的就是 ['0.2.2']，版本匹配是考虑到多版本并存而设计的。</p>
 
 <textarea class="xjDemo" xjDemo="{result:false, larger:true}">
 <script>
 // 中括号里的是版本号
 if(window.xj === undefined){ xj = {} };
 if(xj.storageConfig === undefined){ xj.storageConfig = {} };
-xj.storageConfig['0.2.1'] = {
+xj.storageConfig['0.2.2'] = {
 	
 	// 操作出错后是否要在 Console 面板输出错误，默认为 true，但这可能导致 Console 面板满屏飘红造成干扰，如果你不想输出错误浪费浏览器资源，可将参数改为 false
 	consoleError : true,
@@ -740,7 +740,7 @@ xj.storageConfig['0.2.1'] = {
 
 <p>03. IE 存在着操作异步的问题，由于它会在数据还未正式写入文件时就执行回调，所以在 Storage 事件回调中使用 get() 方法去获取键值对，可能得到的是触发事件之前的那个旧值，但是你可以用 event 对象的 newValue 属性来获取最新的结果值，这属性的返回值总是对的。</p>
 
-<p>04. 有疑问或发现了 BUG，可到 GitHub 提 Issue，如果觉得本插件写得还不错，请在 GitHub 中为本项目点个 ★Star 吧，感谢啦 ಠ‿ಠ。</p>
+<p>04. 有疑问或发现了 BUG，可到 <a target="_blank" href="https://github.com/xjZone/xj.storage/issues">GitHub 提 Issue</a>，如果觉得本插件写得还不错，请在 <a target="_blank" href="https://github.com/xjZone/xj.storage">GitHub</a> 中为本项目点个 ★Star 吧，感谢啦 ಠ‿ಠ。</p>
 
 <hr />
 </section>
@@ -749,10 +749,10 @@ xj.storageConfig['0.2.1'] = {
 
 <script>
 // 没使用 requirejs 或者 seajs 进行模块化处理时，可用全局中的 xj.storage 对象，否则是 require(['xj.storage'], function(xs){ console.log(xs) }) 这样了
-// 可在引入插件前，通过 xj.storageOption['0.2.1'] 进行全局配置，通过 xj.storageConfig['0.2.1'] 进行参数预设，注意中括号后的版本号要和当前插件版本相同
+// 可在引入插件前，通过 xj.storageOption['0.2.2'] 进行全局配置，通过 xj.storageConfig['0.2.2'] 进行参数预设，注意中括号后的版本号要和当前插件版本相同
 // if(window.xj === undefined){ xj = {} };
 // if(xj.storageConfig === undefined){ xj.storageConfig = {} };
-// xj.storageConfig['0.2.1'] = { consoleError : true,, undefined2null : true, dispatchOriginal : true };
+// xj.storageConfig['0.2.2'] = { consoleError : true,, undefined2null : true, dispatchOriginal : true };
 </script>
 
 <script>document.write('<script src="../dist/xj.storage.js?timeStamp='+ Date.now() +'"><\/script>')</script>
