@@ -1,4 +1,4 @@
-/*! xjDemo(案例代码展示) | V0.1.0 | Apache Licence 2.0 | 2020-2020 © XJ.Chen | https://github.com/xjZone/xjDemo/ */
+/*! xjDemo(案例代码展示) | V0.1.0 | Apache Licence 2.0 | 2020-2022 © XJ.Chen | https://github.com/xjZone/xjDemo/ */
 ;(function(global, factory){
 	if(typeof(define) === 'function' && (define.amd || define.cmd)){ define(function(require){ factory(require('jquery'), require('prism')) }) }
 	else if(typeof(module) !== 'undefined' && typeof(exports) === 'object'){ module.exports = factory(require('jquery'), require('prism')) }
@@ -119,40 +119,43 @@ function pub_prismCallbackFinal(env){
 
 
 // ---------------------------------------------------------------------------------------------
-// nothing / version / xReturn / xConfig
-var pub_nothing = function(){}, pub_version = '0.1.0', pub_xReturn = 'DemoReturn', pub_xConfig = 'DemoConfig';
-
 // globalThis | window | self | global
 var pub_global = (typeof(globalThis) !== 'undefined' ? globalThis : typeof(window) !== 'undefined' ? window : typeof(self) !== 'undefined' ? self : global);
 
-// public option = total 70 items
+// public nothing, version, keyword
+var pub_nothing = function(){}, pub_version = '0.1.0', pub_keyword = 'Demo';
+
+// public config, advance set
+var pub_config = {};
+
+// public option(70 items)
 var pub_option = {
 	
-	lang : 'html',								// 代码语言，默认为 'html'，因为实际上也只有 html 语言能在 html 页面中产生结果，css 和 js 可以分别包裹在 style 和 script 标签中高亮，如果你只需要代码而不需要运行结果，那改成别的也可以
+	lang : 'html',								// 代码语言，默认是 'html'，因为实际上也只有 html 语言能在 html 页面中产生结果，css 和 js 可以分别包裹在 style 和 script 标签中高亮，如果你只需要代码而不需要运行结果，那改成别的也可以
 	manual : false,								// 在默认情况下，插件加载后会自动将页面中的 .xjDemo 元素进行实例化，但你可以通过为 .xjDemo 元素添加 xjDemo="{manual:true}" 的属性来阻止自动实例化，这个参数在手动进行实例化时就没什么用
 	selector : '.xjDemo',						// 插件加载后会将符合该选择器的元素节点进行自动实例化，默认值为 '.xjDemo'，该参数只在 xjDemo.js 文件被执行前设置才有效，可通过全局中的 xj.DemoConfig 进行设置，在手动实例化时就没什么用
-	autoRemove : false, 						// 实例化之后是否自动将作为容器的 textarea 标签移除掉，默认为 false，设置为 true 则将移除，移除虽然会让页面更整洁，但移除后就无法通过 xjDemoId 属性来找到这个节点创建的实例返回值对象了
-	dispatchTime : 'ready',						// 何时执行自动实例化，默认为 'ready' 既 DOMContentLoaded 事件触发后，还可以是 'load' 或 'now'，分别是 window.load 事件和插件加载后立即执行，用 'load' 就得确保事件触发前文件就加载完毕
+	autoRemove : false, 						// 实例化之后是否自动将作为容器的 textarea 标签移除掉，默认是 false，设置为 true 则将移除，移除虽然会让页面更整洁，但移除后就无法通过 xjDemoId 属性来找到这个节点创建的实例返回值对象了
+	dispatchTime : 'ready',						// 何时执行自动实例化，默认是 'ready' 既 DOMContentLoaded 事件触发后，还可以是 'load' 或 'now'，分别是 window.load 事件和插件加载后立即执行，用 'load' 就得确保事件触发前文件就加载完毕
 	
-	color : 'white',							// 主题颜色，默认为 'white'，备选项为 'black'，该插件如果配合 xjBase.css 项目使用，则通过 .xjBase-dark 类名也可以进入深色模式，不需要再单独设置
+	color : 'default',							// 主题颜色，默认是 'default'，备选项有 'white' 和 'black'，该插件如果配合 xjBase.css 项目使用，则通过 .xj-base-black 类名可自动进入深色模式
 	packClass : '',								// 该参数用于实例化之后，设置实例最外层的容器 .xjDemo-pack 的额外类名，默认是空字符串，多个值可用空格隔开，例如 'col-success bg-warning rad4px'
 	packStyle : null,							// 该参数用于实例化之后，设置实例最外层的容器 .xjDemo-pack 的额外样式，默认是 null，以对象的形式编写属性值，例如 {borderTop:'2px',color:'red',}
 	
-	head : true,								// head 模块是否生成，默认为 true，如果设置为 false 则不生成，不生成也就意味着标题和控制布局的按钮都没有了
-	headShow : true,							// head 模块是否显示，默认为 true，如果设置为 false 则不显示，但是可以用返回值对象的 headShow() 方法来显示
+	head : true,								// head 模块是否生成，默认是 true，如果设置为 false 则不生成，不生成也就意味着标题和控制布局的按钮都没有了
+	headShow : true,							// head 模块是否显示，默认是 true，如果设置为 false 则不显示，但是可以用返回值对象的 headShow() 方法来显示
 	
-	title : 'Demo',								// 标题文本，默认为 'Demo'，也可接受 HTML 文本，如果设为 true 将自动使用 lang 作为值
-	titleWrap : false,							// 标题是否允许换行，默认为 flase，你也可以用返回值对象的 titleWrap() 方法来改变设置
+	title : 'Demo',								// 标题文本，默认是 'Demo'，也可接受 HTML 文本，如果设为 true 将自动使用 lang 作为值
+	titleWrap : false,							// 标题是否允许换行，默认是 flase，你也可以用返回值对象的 titleWrap() 方法来改变设置
 	
-	larger : false,								// head 模块中是否生成放大显示的按钮，默认为 false，设置为 true 则生成，即使没生成按钮，也还是可以用返回值对象的 larger() 方法来实现放大显示的效果
-	escClose : true,							// 按下键盘左上角的 esc 按键是否能快速的退出放大显示，默认为 true，但这个快捷键也可能会跟你的 Demo 发生冲突，此时可将该参数设置为 false 来解决冲突
+	larger : false,								// head 模块中是否生成放大显示的按钮，默认是 false，设置为 true 则生成，即使没生成按钮，也还是可以用返回值对象的 larger() 方法来实现放大显示的效果
+	escClose : true,							// 按下键盘左上角的 esc 按键是否能快速的退出放大显示，默认是 true，但这个快捷键也可能会跟你的 Demo 发生冲突，此时可将该参数设置为 false 来解决冲突
 	
-	layout : false,								// head 模块中是否生成改变布局的按钮，默认为 false，设置为 true 则生成，即使没生成按钮，也还是可以用返回值对象的 layout() 方法来实现水平布局的改变
-	vertical : true,							// 是否为垂直方向布局，默认为 true，如果设置为 false，那就是横向布局，但布局随时都可以通过 head 中的 layout 按钮或返回值的 layout() 方法来进行改变
+	layout : false,								// head 模块中是否生成改变布局的按钮，默认是 false，设置为 true 则生成，即使没生成按钮，也还是可以用返回值对象的 layout() 方法来实现水平布局的改变
+	vertical : true,							// 是否为垂直方向布局，默认是 true，如果设置为 false，那就是横向布局，但布局随时都可以通过 head 中的 layout 按钮或返回值的 layout() 方法来进行改变
 	
-	result : true,								// result 模块是否生成，默认为 true，设置为 false 则不生成该模块，此时 head 模块中的 layout 按钮和 result 按钮自然也就没有了
-	resultShow : true,							// result 模块是否显示，默认为 true，设置为 false 则不显示，可通过点击 result 按钮或执行返回值对象的 resultShow() 方法来显示
-	resultContent : true,						// result 模块里的内容，默认为 true，也就是用 .xjDemo 元素的内容，你也可以自定义成其他内容，让 result 和 source 的内容不对应
+	result : true,								// result 模块是否生成，默认是 true，设置为 false 则不生成该模块，此时 head 模块中的 layout 按钮和 result 按钮自然也就没有了
+	resultShow : true,							// result 模块是否显示，默认是 true，设置为 false 则不显示，可通过点击 result 按钮或执行返回值对象的 resultShow() 方法来显示
+	resultContent : true,						// result 模块里的内容，默认是 true，也就是用 .xjDemo 元素的内容，你也可以自定义成其他内容，让 result 和 source 的内容不对应
 	resultClass : '',							// result 模块额外的类名，默认是空字符串，多个值可用空格隔开，例如 'col-success bg-warning rad4px'
 	resultStyle : null,							// result 模块额外的样式，默认是 null，以对象的形式编写属性值，例如 {borderTop:'2px',color:'red',}
 	resultWrapClass : '',						// result-wrap 模块额外的类名，默认是空字符串，多个值可用空格隔开，例如 'col-success bg-warning rad4px'
@@ -160,9 +163,9 @@ var pub_option = {
 	resultWrapViewClass : '',					// result-wrap-view 模块额外的类名，默认是空字符串，多个值可用空格隔开，例如 'col-success bg-warning rad4px'
 	resultWrapViewStyle : null,					// result-wrap-view 模块额外的样式，默认是 null，以对象的形式编写属性值，例如 {borderTop:'2px',color:'red',}
 	
-	source : true,								// source 模块是否生成，默认为 true，设置为 false 则不生成该模块，此时 head 模块中的 layout 按钮和 source 按钮自然也就没有了
-	sourceShow : true,							// source 模块是否显示，默认为 true，设置为 false 则不显示，可通过点击 source 按钮或执行返回值对象的 sourceShow() 方法来显示
-	sourceContent : true,						// source 模块里的内容，默认为 true，也就是用 .xjDemo 元素的内容，你也可以自定义成其他内容，让 source 和 result 的内容不对应
+	source : true,								// source 模块是否生成，默认是 true，设置为 false 则不生成该模块，此时 head 模块中的 layout 按钮和 source 按钮自然也就没有了
+	sourceShow : true,							// source 模块是否显示，默认是 true，设置为 false 则不显示，可通过点击 source 按钮或执行返回值对象的 sourceShow() 方法来显示
+	sourceContent : true,						// source 模块里的内容，默认是 true，也就是用 .xjDemo 元素的内容，你也可以自定义成其他内容，让 source 和 result 的内容不对应
 	sourceClass : '',							// source 模块额外的类名，默认是空字符串，多个值可用空格隔开，例如 'col-success bg-warning rad4px'
 	sourceStyle : null,							// source 模块额外的样式，默认是 null，以对象的形式编写属性值，例如 {borderTop:'2px',color:'red',}
 	sourceWrapClass : '',						// source-wrap 模块额外的类名，默认是空字符串，多个值可用空格隔开，例如 'col-success bg-warning rad4px'
@@ -170,54 +173,54 @@ var pub_option = {
 	sourceWrapCodeClass : '',					// source-wrap-code 模块额外的类名，默认是空字符串，多个值可用空格隔开，例如 'col-success bg-warning rad4px'
 	sourceWrapCodeStyle : null,					// source-wrap-code 模块额外的样式，默认是 null，以对象的形式编写属性值，例如 {borderTop:'2px',color:'red',}
 	
-	preId : true,								// pre 标签的 id 值，默认为 true，也就是用 textarea 标签的 id + '-pre'，为 false 则不进行重命名(这可能导致 id 重复)，也可以传入字符串或传入函数，函数参数为 textarea 的 id，然后以返回值为结果
-	codeId : true,								// code 标签的 id 值，默认为 true，也就是用 textarea 标签的 id + '-pre-code'，为 false 则不进行设置(可能也并不需要)，也可以传入字符串或传入函数，函数参数为 textarea 的 id，然后以返回值为结果
+	preId : true,								// pre 标签的 id 值，默认是 true，也就是用 textarea 标签的 id + '-pre'，为 false 则不进行重命名(这可能导致 id 重复)，也可以传入字符串或传入函数，函数参数为 textarea 的 id，然后以返回值为结果
+	codeId : true,								// code 标签的 id 值，默认是 true，也就是用 textarea 标签的 id + '-pre-code'，为 false 则不进行设置(可能也并不需要)，也可以传入字符串或传入函数，函数参数为 textarea 的 id，然后以返回值为结果
 	
-	save : false,								// 是否生成下载文件的按钮，默认为 false，只有设置为 true，才会显示下载按钮，点击这个按钮时，插件会把 source 模块中的代码生成一个文件供用户下载，下载代码的需求并不常见，所以默认不显示这按钮
-	file : 'demo.txt',							// 被下载的文件的名称，默认为 'demo.txt'，在移动端，大部分浏览器可能是出于安全方面的考量，会重新定义被下载的文件的名称，这是系统自行更改的，无法被控制，所以没法保证这个参数的设置一定能生效
-	untsaveOnIOS : false,						// 在 Safari(IOS) 中隐藏下载按钮，默认为 false，也就是不隐藏，Safari(IOS) 无法下载文件，它总是会打开新页面展示文件内容，这是浏览器 BUG，参考：https://bugs.webkit.org/show_bug.cgi?id=167341
+	save : false,								// 是否生成下载文件的按钮，默认是 false，只有设置为 true，才会显示下载按钮，点击这个按钮时，插件会把 source 模块中的代码生成一个文件供用户下载，下载代码的需求并不常见，所以默认不显示这按钮
+	file : 'demo.txt',							// 被下载的文件的名称，默认是 'demo.txt'，在移动端，大部分浏览器可能是出于安全方面的考量，会重新定义被下载的文件的名称，这是系统自行更改的，无法被控制，所以没法保证这个参数的设置一定能生效
+	untsaveOnIOS : false,						// 在 Safari(IOS) 中隐藏下载按钮，默认是 false，也就是不隐藏，Safari(IOS) 无法下载文件，它总是会打开新页面展示文件内容，这是浏览器 BUG，参考：https://bugs.webkit.org/show_bug.cgi?id=167341
 	saveCallback : pub_nothing,					// 保存文件的回调函数，这个函数有一个 text 参数，就是原本将要保存的内容，可以通过这个函数，修改需要保存的内容，例如说添加版权声明什么的，然后再 return 修改过的 text，就能控制被保存的内容了
 	
-	copy : true,								// 是否生成复制代码的按钮，默认为 true，为 false 则不生成复制按钮，用 Prism 的 Copy To Clipboard 插件也能实现复制，但需要另外引入 Clipboard 插件，所以 xjDemo 用自己的逻辑实现了复制的功能
+	copy : true,								// 是否生成复制代码的按钮，默认是 true，为 false 则不生成复制按钮，用 Prism 的 Copy To Clipboard 插件也能实现复制，但需要另外引入 Clipboard 插件，所以 xjDemo 用自己的逻辑实现了复制的功能
 	copyCallback : pub_nothing,					// 复制代码的回调函数，这个函数有一个 text 参数，就是需要复制的内容，你可以通过这个函数，修改需要复制的内容，例如说添加版权声明什么的，然后再 return 修改过的 text，就能控制被复制的内容了
 	
-	onlySource : false,							// 该参数相当于 {head:false, result:false}，默认为 false，设置为 true 则 head 模块与 result 模块都不显示，只显示 source 代码的部分，这就相当于使用 xjDemo，代替 Prism 实现布局，统一样式
-	headBottom : false,							// 布局翻转，默认为 false，默认布局是 head 在上而 body 在下，如果该参数设置为 true，则 head 模块会被放在底部，和 body 模块的位置将会翻转，也可以用返回值对象的 headBottom() 方法进行设置
-	bodyInvert : false,							// 布局颠倒，默认为 false，默认布局是 result 模块在上(或前)，source 模块在下(或后)，如果将这个参数设置为 true 则模块的顺序将会被颠倒过来，也可以用返回值对象的 bodyInvert() 方法进行设置
+	onlySource : false,							// 该参数相当于 {head:false, result:false}，默认是 false，设置为 true 则 head 模块与 result 模块都不显示，只显示 source 代码的部分，这就相当于使用 xjDemo，代替 Prism 实现布局，统一样式
+	headBottom : false,							// 布局翻转，默认是 false，默认布局是 head 在上而 body 在下，如果该参数设置为 true，则 head 模块会被放在底部，和 body 模块的位置将会翻转，也可以用返回值对象的 headBottom() 方法进行设置
+	bodyInvert : false,							// 布局颠倒，默认是 false，默认布局是 result 模块在上(或前)，source 模块在下(或后)，如果将这个参数设置为 true 则模块的顺序将会被颠倒过来，也可以用返回值对象的 bodyInvert() 方法进行设置
 	
 	insertBefore : pub_nothing,					// .xjDemo-pack 结构写入页面前执行的回调函数，函数有个 returnObject 参数，这是当前实例的返回值对象，我们可以通过这个参数获取到 self 或 that，分别代表实例化的目标和结果，然后要如何操作就是你的事了
 	insertAfter : pub_nothing,					// .xjDemo-pack 结构写入页面后执行的回调函数，函数有个 returnObject 参数，这是当前实例的返回值对象，我们可以通过这个参数获取到 self 或 that，分别代表实例化的目标和结果，然后要如何操作就是你的事了
 	insertAction : 'after',						// 实例生成后插入的位置，默认是 'after'，就是目标节点的后面，如果是 'before'，就是目标节点的前面，这里也可以是个函数，参数是当前实例的返回值对象 returnObject，可通过 self 和 that 属性自行决定位置
 	
-	autoDestroy : 60000,						// 自动销毁实例的轮询时间，默认为 60000(ms)，也就是 1 分钟，插件会定时轮询，检测目标节点不在页面中了就销毁实例释放内存，当然也可以用返回值对象的 destroy() 方法手动销毁，如果将该值设为 -1 则不会进行自动销毁
-	destroyTarget : false,						// 自动销毁时，是否将实例化时用的 textarea 节点一并从页面中移除，默认为 false，因为 textarea 并非由插件生成，所以默认不进行这操作，使用返回值对象的 destroy() 方法手动进行销毁，如果传入 true，相当于一并销毁
+	autoDestroy : 60000,						// 自动销毁实例的轮询时间，默认是 60000(ms)，也就是 1 分钟，插件会定时轮询，检测目标节点不在页面中了就销毁实例释放内存，当然也可以用返回值对象的 destroy() 方法手动销毁，如果将该值设为 -1 则不会进行自动销毁
+	destroyTarget : false,						// 自动销毁时，是否将实例化时用的 textarea 节点一并从页面中移除，默认是 false，因为 textarea 并非由插件生成，所以默认不进行这操作，使用返回值对象的 destroy() 方法手动进行销毁，如果传入 true，相当于一并销毁
 	destroyCallback : pub_nothing,				// 移除实例前执行的回调，第一个参数 returnObject 就是当前实例的返回值对象，如果该参数最后返回 false，将会阻止销毁的执行，也许你只是暂时把节点抽离页面，将来还要再放回页面中，那么就可以借助这个函数来阻止销毁
 	
-	resultResize : true,						// 是否允许拖曳 result 模块右下角的按钮来改变 result 容器的尺寸，默认为 true，跟 Firefox 的 resize 按钮类似，双击按钮可以复原尺寸，设置为 false 则不生成该按钮
-	sourceResize : true,						// 是否允许拖曳 source 模块右下角的按钮来改变 source 容器的尺寸，默认为 true，跟 Firefox 的 resize 按钮类似，双击按钮可以复原尺寸，设置为 false 则不生成该按钮
-	divideResize : true,						// 是否允许拖曳 result 模块和 source 模块之间的那条边来改变尺寸，默认为 true，边框存在的前提是模块都存在，双击边框可以复原尺寸，设置为 false，则分割线无法拖曳
-	resizeDetail : true,						// 当允许以上的拖曳来改变尺寸，那么在拖曳时是否显示目标容器的尺寸详情，也就是 width x height，默认为 true，如果设为 false 则详情节点不生成，拖曳时自然也不显示
-	dispatchResize : false,						// 当布局发生任意变化，如拖曳模块右下角或分割线改变尺寸，是否自动执行一次 window 的 resize 事件，默认为 false，对一些对全局尺寸敏感的 demo 可将该参数设为 true
+	resultResize : true,						// 是否允许拖曳 result 模块右下角的按钮来改变 result 容器的尺寸，默认是 true，跟 Firefox 的 resize 按钮类似，双击按钮可以复原尺寸，设置为 false 则不生成该按钮
+	sourceResize : true,						// 是否允许拖曳 source 模块右下角的按钮来改变 source 容器的尺寸，默认是 true，跟 Firefox 的 resize 按钮类似，双击按钮可以复原尺寸，设置为 false 则不生成该按钮
+	divideResize : true,						// 是否允许拖曳 result 模块和 source 模块之间的那条边来改变尺寸，默认是 true，边框存在的前提是模块都存在，双击边框可以复原尺寸，设置为 false，则分割线无法拖曳
+	resizeDetail : true,						// 当允许以上的拖曳来改变尺寸，那么在拖曳时是否显示目标容器的尺寸详情，也就是 width x height，默认是 true，如果设为 false 则详情节点不生成，拖曳时自然也不显示
+	dispatchResize : false,						// 当布局发生任意变化，如拖曳模块右下角或分割线改变尺寸，是否自动执行一次 window 的 resize 事件，默认是 false，对一些对全局尺寸敏感的 demo 可将该参数设为 true
 	
-	trimAction : 'auto',						// 是否执行格式的裁剪操作，默认为 'auto'，也就是当没引入 Prism 的 Normalize Whitespace 插件时才执行裁剪操作，如果设置为 true 就是总会执行裁剪，如果设置为 false 就是总不执行
-	trimStart : true,							// 是否去除源码中最前面多余的换行和空格(\s)，默认为 true，设置为 false 则不进行处理，当 trimAction 为 'auto' 且引入 Prism 的 Normalize Whitespace 插件时，该参数自动为 false
-	trimEnd : true,								// 是否去除源码中最后面多余的换行和空格(\s)，默认为 true，设置为 false 则不进行处理，当 trimAction 为 'auto' 且引入 Prism 的 Normalize Whitespace 插件时，该参数自动为 false
-	trimLeft : true,							// 是否去除源码每行前面多余的空格或者制表符，默认为 true，设置为 false 则不进行处理，当 trimAction 为 'auto' 且引入 Prism 的 Normalize Whitespace 插件时，该参数自动为 false
-	trimRight : false,							// 是否去除源码每行后面多余的空格以及制表符，默认为 false，因为当整行的内容都是空格或制表符时，整行内容将会被全部都去掉，这可能并不是你的本意，其他选项设置参考参数 trimLeft
-	space2tab : 0,								// 将每行前面缩进的空格转成制表符，默认为 0(不生效)，设为 4，就是 4 个空格换成 1 个制表符，当 trimAction 为 'auto' 且引入了 Prism 的 Normalize Whitespace 插件时，该参数为 0
-	tab2space : 0,								// 将每行前面缩进的制表符转成空格，默认为 0(不生效)，设为 4，就是 1 个制表符转成 4 个空格，当 trimAction 为 'auto' 且引入了 Prism 的 Normalize Whitespace 插件时，该参数为 0
+	trimAction : 'auto',						// 是否执行格式的裁剪操作，默认是 'auto'，也就是当没引入 Prism 的 Normalize Whitespace 插件时才执行裁剪操作，如果设置为 true 就是总会执行裁剪，如果设置为 false 就是总不执行
+	trimStart : true,							// 是否去除源码中最前面多余的换行和空格(\s)，默认是 true，设置为 false 则不进行处理，当 trimAction 为 'auto' 且引入 Prism 的 Normalize Whitespace 插件时，该参数自动为 false
+	trimEnd : true,								// 是否去除源码中最后面多余的换行和空格(\s)，默认是 true，设置为 false 则不进行处理，当 trimAction 为 'auto' 且引入 Prism 的 Normalize Whitespace 插件时，该参数自动为 false
+	trimLeft : true,							// 是否去除源码每行前面多余的空格或者制表符，默认是 true，设置为 false 则不进行处理，当 trimAction 为 'auto' 且引入 Prism 的 Normalize Whitespace 插件时，该参数自动为 false
+	trimRight : false,							// 是否去除源码每行后面多余的空格以及制表符，默认是 false，因为当整行的内容都是空格或制表符时，整行内容将会被全部都去掉，这可能并不是你的本意，其他选项设置参考参数 trimLeft
+	space2tab : 0,								// 将每行前面缩进的空格转成制表符，默认是 0(不生效)，设为 4，就是 4 个空格换成 1 个制表符，当 trimAction 为 'auto' 且引入了 Prism 的 Normalize Whitespace 插件时，该参数为 0
+	tab2space : 0,								// 将每行前面缩进的制表符转成空格，默认是 0(不生效)，设为 4，就是 1 个制表符转成 4 个空格，当 trimAction 为 'auto' 且引入了 Prism 的 Normalize Whitespace 插件时，该参数为 0
 	
 	encodeTarget : ['<', '>'],					// Prism 的高亮需要对 HTML 进行转码，这是需要进行转码的目标字符，默认是只将 '<' 和 '>' 转为 '&lt;' 和 '&gt;'，如果还有其他的符号需要转码，可以添加到数组值中，注意要和 encodeResult 参数对应
 	encodeResult : ['&lt;', '&gt;'],			// Prism 的高亮需要对 HTML 进行转码，这是需要进行转码的结果字符，默认是只将 '<' 和 '>' 转为 '&lt;' 和 '&gt;'，如果还有其他的符号需要转码，可以添加到数组值中，注意要和 encodeTarget 参数对应
 	
-	prismAsync : false,							// Prism 是否用异步高亮，默认为 false，设为 true 将使用 WEB Woker 开启子线程实现高亮，但根据 Prism 官网的说法，异步会导致某些插件无效且难以调试，所以不建议设为 true，且 prism.js 文件还不能跨域，否则会报错
-	prismCallback : pub_nothing,				// Prism 进行高亮后的回调，该参数会被当作 Prism.highlightElement() 方法的第三个参数，默认为空函数，也就是 function(){} 且没有任何参数，其实有回调可用 insertBefore 或 insertAfter 来代替，不是非得用这个参数 
+	prismAsync : false,							// Prism 是否用异步高亮，默认是 false，设为 true 将使用 WEB Woker 开启子线程实现高亮，但根据 Prism 官网的说法，异步会导致某些插件无效且难以调试，所以不建议设为 true，且 prism.js 文件还不能跨域，否则会报错
+	prismCallback : pub_nothing,				// Prism 进行高亮后的回调，该参数会被当作 Prism.highlightElement() 方法的第三个参数，默认是空函数，也就是 function(){} 且没有任何参数，其实有回调可用 insertBefore 或 insertAfter 来代替，不是非得用这个参数 
 	
-	anchorTarget : '',							// 该参数是与 Prism 的 Autolinker 插件和 WebPlatform Docs 插件配合使用的，它们会在代码块中生成超级链接，但它们没有供 target 属性的控制参数，而这个参数就是用来设定 target 参数的，默认为 ''，可设为 '_black' / '_parent' 等
-	keepMarkupTag : '【＝keepMarkup＝】',		// 该参数是与 Prism 的 Keep Markup 插件配合使用的，用来临时替换 mark 标签，防止 mark 标签的尖括号被转码，默认为 '【＝keepMarkup＝】'，除非内容和默认值有冲突，否则一般不用改的，如果没引入 Keep Markup 插件，可不理会该参数
+	anchorTarget : '',							// 该参数是与 Prism 的 Autolinker 插件和 WebPlatform Docs 插件配合使用的，它们会在代码块中生成超级链接，但它们没有供 target 属性的控制参数，而这个参数就是用来设定 target 参数的，默认是 ''，可设为 '_black' / '_parent' 等
+	keepMarkupTag : '【＝keepMarkup＝】',		// 该参数是与 Prism 的 Keep Markup 插件配合使用的，用来临时替换 mark 标签，防止 mark 标签的尖括号被转码，默认是 '【＝keepMarkup＝】'，除非内容和默认值有冲突，否则一般不用改的，如果没引入 Keep Markup 插件，可不理会该参数
 	
 	i18n : {									// 实例的文本内容，默认是只提供简体中文和英文，你也可以配置其他语言来使用
-		lang : 'zh',							// 提示文本的语言，默认为 'zh'，也就是简体中文，默认选项只有 'zh' 和 'en'
+		lang : 'zh',							// 提示文本的语言，默认是 'zh'，也就是简体中文，默认选项只有 'zh' 和 'en'
 		zh : {
 			larger : ['放大显示', '取消放大'], 
 			layout : ['水平布局', '垂直布局'], 
@@ -241,15 +244,18 @@ var pub_option = {
 
 
 // ---------------------------------------------------------------------------------------------
-// 在 window.xj.[%Name]Return 对象上存储返回值对象，并且无需区分版本
-if(!pub_global.xj){ pub_global.xj = {} };
-if(!pub_global.xj[pub_xReturn]){ pub_global.xj[pub_xReturn] = {} };
+// 创建全局 xj[Name] 和 return 属性
+if(pub_global.xj === undefined){ pub_global.xj = {} };
+if(pub_global.xj[pub_keyword] === undefined){ pub_global.xj[pub_keyword] = {} };
+if(pub_global.xj[pub_keyword].return === undefined){ pub_global.xj[pub_keyword].return = {} };
 
-// 将 window.xj.[%Name]Config[pub_version]，合并到 pub_option 对象上
-if(!pub_global.xj[pub_xConfig]){ pub_global.xj[pub_xConfig] = {} };
-if(pub_global.xj[pub_xConfig][pub_version]){ $.extend(true, pub_option, pub_global.xj[pub_xConfig][pub_version]) };
+// 创建并合并 config 和 option 参数
+if(pub_global.xj[pub_keyword].config === undefined){ pub_global.xj[pub_keyword].config = {} };
+if(pub_global.xj[pub_keyword].option === undefined){ pub_global.xj[pub_keyword].option = {} };
+if(pub_global.xj[pub_keyword].config[pub_version]){ $.extend(true, pub_config, pub_global.xj[pub_keyword].config[pub_version]) };
+if(pub_global.xj[pub_keyword].option[pub_version]){ $.extend(true, pub_option, pub_global.xj[pub_keyword].option[pub_version]) };
 
-// ------------------------------------------------
+// ---------------------------------------------
 
 // 创建全局节点的 jQuery 实例对象，html 和 body 可能之后还得重新获取
 var win = $(window);
@@ -404,7 +410,9 @@ $.fn.xjDemo = function(setting){
 // 实例化过，或不是目标容器，就直接返回
 var self = this.eq(0);
 if(/^textarea$/i.test(self[0].nodeName) === false){ return };
-if(self.attr('xjDemoId') !== undefined){ return pub_global.xj.DemoReturn[self.attr('xjDemoId')] };
+if(self.attr('xjDemoId') !== undefined){ return pub_global.xj[pub_keyword].return[self.attr('xjDemoId')] };
+
+
 
 // 合并当前实例和全局设置的公共参数
 var option = Object.create(pub_option);
@@ -488,7 +496,7 @@ if(fileHighlight === false && option.title === true){ option.title = languageCla
 	// result 内容由 source 内容决定，那么裁剪后需要重新赋值保持一致
 	if(option.resultContent === true){ resultContent = sourceContent };
 	
-	// 如果是异步，result 内容由 source 内容决定，则默认为 Loading…
+	// 如果是异步，result 内容由 source 内容决定，则默认是 Loading…
 	if(asyncLoadSource !== false && option.resultContent === true){ resultContent = 'Loading…' };
 	
 	// 在 option 添加额外数据，在 before-sanity-check 回调中需要用到
@@ -709,7 +717,7 @@ if(option.source === false){ jqi_pack.addClass(cla_body_source_hidden) };
 // 设置 jqi_pack 的类名和样式
 if(option.packClass !== ''){ jqi_pack.addClass(option.packClass) };
 if(option.packStyle !== null){ jqi_pack.css(option.packStyle) };
-if(option.color !== 'white'){ jqi_pack.addClass('xjDemo-' + option.color) };
+if(option.color !== 'default'){ jqi_pack.addClass('xjDemo-' + option.color) };
 
 // 创建节点变量，不管是否存在
 var 
@@ -1352,7 +1360,7 @@ if(option.source === true){
 			if(navigator.msSaveBlob){ saveDone = navigator.msSaveBlob(pub_saveBlob, option.file) }
 			if(saveDone === false){
 				jqi_download_anchor.attr({href : URL.createObjectURL(pub_saveBlob)});
-				jqi_download_anchor.attr({download : option.file})
+				jqi_download_anchor.attr({download : option.file});
 				body.append(jqi_download_anchor);
 				jqi_download_anchor[0].click();
 				saveDone = true;
@@ -1556,7 +1564,7 @@ if(option.autoDestroy !== -1){
 
 // 移除 self 返回实例
 if(option.autoRemove !== false){ self.remove() };
-return pub_global.xj.DemoReturn[id] = returnObject;
+return pub_global.xj[pub_keyword].return[id] = returnObject;
 
 
 
