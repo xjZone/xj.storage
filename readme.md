@@ -11,9 +11,9 @@
 
 **协议** : [Apache License, V2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-<!--◇————
+————
 
 **推荐阅读 :**  
-XJ.Chen - [漫谈 localStorage 和 sessionStorage 的 N 个 BUG 以及 Feature](https://juejin.cn/post/????)  ◇-->
+XJ.Chen - [漫谈 Web Storage API 既本地存储的 8 个 Features 和 20 个 BUG](https://juejin.cn/post/7149305844360806414)  
 
 

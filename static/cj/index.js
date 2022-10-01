@@ -52,8 +52,8 @@ $('#xjDir01_ul02').html(
 var hashValue = decodeURIComponent(location.hash);
 hashValue = hashValue.slice(1);
 if(hashValue === ''){
-	var LastScrollLeft = xjls.get('xj_viewport_index_LastScrollLeft');
-	var LastScrollTop  = xjls.get('xj_viewport_index_LastScrollTop' );
+	var LastScrollLeft = xjls.get('xj_storage_index_LastScrollLeft');
+	var LastScrollTop  = xjls.get('xj_storage_index_LastScrollTop' );
 	if(LastScrollLeft !== null){ jqi_win.scrollLeft(LastScrollLeft) };
 	if(LastScrollTop  !== null){ jqi_win.scrollTop(LastScrollTop  ) };
 };
@@ -64,8 +64,8 @@ var scrollTimeout01 = undefined;
 jqi_win.on('scroll hashchange', function(){
 	clearTimeout(scrollTimeout01);
 	scrollTimeout01 = setTimeout(function(){
-		xjls.set('xj_viewport_index_LastScrollLeft', jqi_win.scrollLeft());
-		xjls.set('xj_viewport_index_LastScrollTop',  jqi_win.scrollTop() );
+		xjls.set('xj_storage_index_LastScrollLeft', jqi_win.scrollLeft());
+		xjls.set('xj_storage_index_LastScrollTop',  jqi_win.scrollTop() );
 	}, 250);
 });
 
