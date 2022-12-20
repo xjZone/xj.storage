@@ -8,30 +8,30 @@
 
 
 // ---------------------------------------------------------------------------------------------
-// globalThis | window | self | global
-var pub_global = (typeof(globalThis) !== 'undefined' ? globalThis : typeof(window) !== 'undefined' ? window : typeof(self) !== 'undefined' ? self : global);
+// globalThis, window, self, global
+var pub_global = (typeof(globalThis) !== 'undefined') ? globalThis : (typeof(window) !== 'undefined') ? window : (typeof(self) !== 'undefined') ? self : global;
 
 // public nothing, version, keyword
 var pub_nothing = function(){}, pub_version = '0.2.2', pub_keyword = 'storage';
 
-// public config, advance set
+// public config
 var pub_config = {
 	
-	// 操作出错后是否要在 Console 面板输出错误，默认为 true，但这可能导致 Console 面板满屏飘红造成干扰，如果你不想输出错误浪费浏览器资源，可将参数改为 false
+	// 操作出错后是否要在 Console 面板输出错误，默认是 true，但这可能导致 Console 面板满屏飘红造成干扰，如果你不想输出错误浪费浏览器资源，可将这个配置改为 false
 	consoleError : true,
 	
-	// 插件使用 JSON 格式转存数据，使得存储不再局限于字符串，但 JSON 格式无法存储 symbol 和 function，它们都会变成 undefined，JSON 解析 undefined 时将会出错
-	// 该参数为 true 时，插件会自动将 symbol, function, undefined 转为 null，但它们在数组或对象中则不会被处理，在数组中总会转为 null，在对象中则会被自动抛弃
+	// 插件使用 JSON 格式转存数据，使得存储不再局限于字符串，但 JSON 格式无法存储 symbol 和 function，它们都会变成 undefined，JSON 解析 undefined 的时候将会出错
+	// 该配置为 true 时，插件会自动的将 symbol, function, undefined 转化为 null，但它们在数组或对象中则不会被处理，在数组中总会转为 null，在对象中则会被自动抛弃
 	undefined2null : true,
 	
-	// 按照标准 Storage 事件不应该在操作数据的页面被响应，只有同源的其他页面才能响应这个事件，这是因为在操作数据的页面响应容易出 BUG，但有些浏览器没遵循标准
-	// IE 和 Safari(MacOS) 会操作数据的页面也触发事件，其实在当前页面响应有时也会很方便，所以插件提供了该参数，用于控制是否在操作数据的页面响应，默认为 true
-	// 如果你还是希望标准化，Storage 事件不要在操作数据的页面被响应，可将该参数设置为 false，此时 IE 和 Safari(MacOS) 在操作数据的那个页面也就不会响应事件了
+	// 按照标准 Storage 事件不应该在操作数据的那个页面被响应，只有同源的其他页面才能响应这个事件，这是因为在操作数据的页面响应容易出 BUG，但有些浏览器没遵循标准
+	// IE 和 Safari(MacOS) 会在操作数据的页面也触发这事件，其实在当前页面响应有时也会很方便，所以插件提供了该配置，用于控制是否在操作数据的页面响应，默认是 true
+	// 如果你还是希望标准化，Storage 事件不要在操作数据的页面被响应，那么可将该配置设置为 false，此时 IE 和 Safari(MacOS) 在操作数据的那个页面也就不会响应事件了
 	dispatchOriginal : true,
 	
 };
 
-// public option(00 items)
+// public option
 var pub_option = {};
 
 
@@ -44,7 +44,7 @@ if(pub_global.xj.storageReturn[pub_version] !== undefined){ return pub_global.xj
 
 
 
-// 创建并合并 config 和 option 参数
+// 创建并合并 config 和 option 对象
 if(pub_global.xj.storageConfig === undefined){ pub_global.xj.storageConfig = {} };
 if(pub_global.xj.storageOption === undefined){ pub_global.xj.storageOption = {} };
 if(pub_global.xj.storageConfig[pub_version] !== undefined){ Object.keys(pub_global.xj.storageConfig[pub_version]).forEach(function(key){ pub_config[key] = pub_global.xj.storageConfig[pub_version][key] }) };

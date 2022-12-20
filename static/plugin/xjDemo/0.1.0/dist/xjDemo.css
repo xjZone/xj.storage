@@ -1,4 +1,4 @@
-/*! xjDemo(案例代码展示) | V0.1.0 | Apache Licence 2.0 | 2020-2020 © XJ.Chen | https://github.com/xjZone/xjDemo/ */
+/*! xjDemo(案例代码展示) | V0.1.0 | Apache Licence 2.0 | 2020-2022 © XJ.Chen | https://github.com/xjZone/xjDemo/ */
 
 
 
@@ -37,17 +37,16 @@
 
 
 
-/* .xjDemo-style 可让未实例化的 code 具有统一样式，vertical-align:bottom 在有 xjBase 时可省略 */
+/* .xjDemo-style 可让未实例化的 code 具有统一样式，vertical-align:bottom 在有 xj.base 时可省略 */
 /* 只做 inline 设置，block 的设置可用 xjDemo 进行 onlySource 实例化，插件相关样式也不用再重复 */
 code[class*="language-"].xjDemo-style{
 	padding:0 8px;
-	border-radius:4px;
 	font-family:Iosevka,Menlo,Consolas,"Liberation Mono","Courier New","Hiragino Sans GB","Microsoft YaHei",monospace;
-	/* xjBase */
+	/* xj.base */
 	vertical-align:bottom;
 }
 
-/* .xjDemo-pack 中有部分属性在已经引入 xjBase.css 文件时可以省略，可改用 xjDemo.slim.css 文件 */
+/* .xjDemo-pack 中有部分属性在已经引入 xj.base.css 文件时可以省略，可改用 xjDemo.slim.css 文件 */
 /* 包括注释后的 4 个属性，以及三个通配符所设置的盒模型 box-sizing，去掉可以让审查元素时更简洁 */
 .xjDemo-pack{
 	display:-ms-flexbox;
@@ -56,18 +55,23 @@ code[class*="language-"].xjDemo-style{
 	flex-direction:column;
 	margin-bottom:16px;
 	min-width:256px;
-	color:#333;
 	font:16px/1.5 Iosevka,Menlo,Consolas,"Liberation Mono","Courier New","Hiragino Sans GB","Microsoft YaHei",monospace;
-	/* xjBase */
+	/* xj.base */
 	box-sizing:border-box;
 	word-wrap:break-word;
 	-webkit-text-size-adjust:100%;
 	-webkit-tap-highlight-color:transparent;
 }
 
-.xjDemo-pack *{box-sizing:border-box;}			/* xjBase */
-.xjDemo-pack *::before{box-sizing:border-box;}	/* xjBase */
-.xjDemo-pack *::after{box-sizing:border-box;}	/* xjBase */
+html:not([class*="xj-base"]) .xjDemo-pack{color:#333;}
+html[class~="xj-base-black"] .xjDemo-pack{color:#fff;}
+
+html:root .xjDemo-pack.xjDemo-white{color:#333;}
+html:root .xjDemo-pack.xjDemo-black{color:#fff;}
+
+.xjDemo-pack *{box-sizing:border-box;}			/* xj.base */
+.xjDemo-pack *::before{box-sizing:border-box;}	/* xj.base */
+.xjDemo-pack *::after{box-sizing:border-box;}	/* xj.base */
 
 .xjDemo-pack-larger{position:fixed;top:0;right:0;bottom:0;left:0;z-index:4000;margin-bottom:0;}
 
@@ -75,13 +79,18 @@ code[class*="language-"].xjDemo-style{
 
 /* head 可被隐藏起来或者根本不生成，所在的位置也可以上下变化，radius 也需要跟随所在位置而改变 */
 /* 放大显示时 radius 需要取消掉，如果 result 模块和 source 模块都不在，则 radius 需要布满四角 */
-.xjDemo-head{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;-ms-flex:0 0 auto;flex:0 0 auto;width:100%;height:40px;border:1px solid #ccc;border-radius:4px 4px 0 0;background-color:#fff;}
+.xjDemo-head{position:relative;display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;-ms-flex:0 0 auto;flex:0 0 auto;width:100%;height:40px;}
+
+html:not([class*="xj-base"]) .xjDemo-head{border:1px solid #ccc;background-color:#fff;}
+html[class~="xj-base-black"] .xjDemo-head{border:1px solid #666;background-color:#333;}
+
+html:root .xjDemo-white .xjDemo-head{border:1px solid #ccc;background-color:#fff;}
+html:root .xjDemo-black .xjDemo-head{border:1px solid #666;background-color:#333;}
 
 .xjDemo-head-hidden .xjDemo-head{display:none;}
-.xjDemo-head-bottom .xjDemo-head{-ms-flex-order:1;order:1;border-radius:0 0 4px 4px;}
+.xjDemo-head-bottom .xjDemo-head{-ms-flex-order:1;order:1;}
 
-.xjDemo-pack-larger .xjDemo-head{border-radius:0;}
-.xjDemo-body-result-hidden.xjDemo-body-source-hidden:not(.xjDemo-pack-larger) .xjDemo-head{border-radius:4px;}
+
 
 /* 标题过长会自动变成 2 行显示，flex 子项得设置 flex 属性，否则会出错(如 IE 文本无法自动换行) */
 /* 当行高和字体相同且溢出被截断，部分英文字母底部会看不见，微调解决单行问题，但双行还是有 BUG */
@@ -93,11 +102,17 @@ code[class*="language-"].xjDemo-style{
 
 /* 按钮较多，占据太多位置，可能导致 title 空间不够，所以按钮尺寸也要参与收缩，shrink 设置为 1 */
 /* 但是测试之后，又发现按钮尺寸过小，不好点击，所以还是不收缩了，确保按钮具有固定 40px 的宽度 */
-.xjDemo-head-other{-ms-flex:0 0 auto;flex:0 0 auto;width:40px;height:38px;border-left:1px solid #ccc;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
+.xjDemo-head-other{-ms-flex:0 0 auto;flex:0 0 auto;width:40px;height:38px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;}
+
+html:not([class*="xj-base"]) .xjDemo-head-other{border-left:1px solid #ccc;}
+html[class~="xj-base-black"] .xjDemo-head-other{border-left:1px solid #666;}
+
+html:root .xjDemo-white .xjDemo-head-other{border-left:1px solid #ccc;}
+html:root .xjDemo-black .xjDemo-head-other{border-left:1px solid #666;}
 
 /* info 的从左到右淡入的动画，在 other 按钮彼此之间切换时表现很怪异，所以干脆把动画都取消掉了 */
 /* 当 source 模块和 result 模块都被隐藏时，info 需要贴近到右侧边缘，因为留下 8px 的间隙很怪异 */
-.xjDemo-head-other-info{position:absolute;top:47px;right:8px;z-index:12;display:none;padding:0 16px;height:40px;border-radius:4px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;cursor:default;pointer-events:none;}
+.xjDemo-head-other-info{position:absolute;top:47px;right:8px;z-index:12;display:none;padding:0 16px;height:40px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;cursor:default;pointer-events:none;}
 html:not(.xj-device-touch) .xjDemo-head-other:hover .xjDemo-head-other-info{display:block;}
 .xjDemo-head-bottom .xjDemo-head-other-info{top:auto;bottom:47px;}
 
@@ -110,12 +125,6 @@ html:not(.xj-device-touch) .xjDemo-head-other:hover .xjDemo-head-other-info{disp
 html:not(.xj-ripple-exist) .xjDemo-head-other-icon:active{background-color:#f0f0f0;}
 .xjDemo-head-other-icon .xj-ripple-element{opacity:0.5;}
 
-.xjDemo-head-other:last-of-type .xjDemo-head-other-icon{border-radius:0 4px 0 0;}
-.xjDemo-head-bottom .xjDemo-head-other:last-of-type .xjDemo-head-other-icon{border-radius:0 0 4px 0;}
-
-.xjDemo-pack-larger .xjDemo-head-other:last-of-type .xjDemo-head-other-icon{border-radius:0;}
-.xjDemo-body-result-hidden.xjDemo-body-source-hidden:not(.xjDemo-pack-larger) .xjDemo-head-other:last-of-type .xjDemo-head-other-icon{border-radius:0 4px 4px 0;}
-
 /* Win7 和 Win10 中的 Firefox，按钮行高都会偏下，行高设置成 1 后用 padding 挤出高度也解决不了 */
 /* 但 MacOS 的 Firefox 却不会，所以用 hack 特殊设置 Firefox22+ && !(MacOS10.6+ && Firefox25+) */
 @supports (-moz-appearance:none) and (not (-moz-osx-font-smoothing:auto)){
@@ -127,15 +136,22 @@ html:not(.xj-ripple-exist) .xjDemo-head-other-icon:active{background-color:#f0f0
 
 /* body 也是 flex 布局，根据 4 个类名，决定 result 和 source 模块的布局，以及是否颠倒顺序显示 */
 /* Safari(IOS) 底部的圆角会被背景遮到，这个 BUG 可以使用 transform:translate3d(0,0,0); 来消除 */
-.xjDemo-body{display:-ms-flexbox;display:flex;overflow:hidden;-ms-flex-direction:column;flex-direction:column;-ms-flex:1 1 auto;flex:1 1 auto;width:100%;height:auto;border:1px solid #ccc;border-top-width:0;border-radius:0 0 4px 4px;background-color:#fff;}
+.xjDemo-body{display:-ms-flexbox;display:flex;-ms-flex-direction:column;flex-direction:column;-ms-flex:1 1 auto;flex:1 1 auto;width:100%;height:auto;border-width:1px;border-style:solid;border-top-width:0;}
+
+html:not([class*="xj-base"]) .xjDemo-body{border-color:#ccc;background-color:#fff;}
+html[class~="xj-base-black"] .xjDemo-body{border-color:#666;background-color:#333;}
+
+html:root .xjDemo-white .xjDemo-body{border-color:#ccc;background-color:#fff;}
+html:root .xjDemo-black .xjDemo-body{border-color:#666;background-color:#333;}
+
 .xjDemo-body-nowrap .xjDemo-body{-ms-flex-direction:row;flex-direction:row;}
 
-.xjDemo-head-hidden .xjDemo-body{border-top-width:1px;border-radius:4px;}
-.xjDemo-head-bottom:not(.xjDemo-head-hidden) .xjDemo-body{border-top-width:1px;border-bottom-width:0;border-radius:4px 4px 0 0;}
+.xjDemo-head-hidden .xjDemo-body{border-top-width:1px;}
+.xjDemo-head-bottom:not(.xjDemo-head-hidden) .xjDemo-body{border-top-width:1px;border-bottom-width:0;}
 
 /* 全屏时得明文设置 height:100%;，否则在 Safari 中，Flex 子项无法自动扩展，这是 Safari 的 bug */
 /* 这个问题在 FlexBus 中似乎没收录，可参考这里：https://stackoverflow.com/questions/33636796/ */
-.xjDemo-pack-larger .xjDemo-body{height:100%;border-radius:0;}
+.xjDemo-pack-larger .xjDemo-body{height:100%;}
 .xjDemo-body-result-hidden.xjDemo-body-source-hidden:not(.xjDemo-pack-larger) .xjDemo-body{display:none;}
 
 .xjDemo-body-invert .xjDemo-body{-ms-flex-direction:column-reverse;flex-direction:column-reverse;}
@@ -143,9 +159,9 @@ html:not(.xj-ripple-exist) .xjDemo-head-other-icon:active{background-color:#f0f0
 
 /* Safari(IOS) 的 xjDemo-body 会出现 result / source 的背景无法被圆角裁剪，继而导致溢出的问题 */
 /* 可以用 hack + transform:translateZ(0); 修复，可参考 : https://stackoverflow.com/a/64885552 */
-@supports (-webkit-overflow-scrolling:touch){
+/* @supports (-webkit-overflow-scrolling:touch){
 	.xjDemo-pack:not(.xjDemo-pack-larger) .xjDemo-body{transform:translateZ(0);}
-}
+} */
 
 
 
@@ -174,11 +190,17 @@ html:not(.xj-ripple-exist) .xjDemo-head-other-icon:active{background-color:#f0f0
 /* IE 的 :active 选择器有问题，点住后无法让 info 显示出来，所以只能是改用类名控制 info 的显示 */
 .xjDemo-body-result-nook{position:absolute;right:0;bottom:0;-ms-flex:0 0 auto;flex:0 0 auto;width:16px;height:16px;background-color:transparent;cursor:ns-resize;}
 
-.xjDemo-body-result-nook-info{position:absolute;right:8px;bottom:8px;z-index:12;visibility:hidden;padding:0 16px;height:40px;border-radius:4px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;opacity:0;cursor:default;transition:visibility 250ms, opacity 250ms;pointer-events:none;}
+.xjDemo-body-result-nook-info{position:absolute;right:8px;bottom:8px;z-index:12;visibility:hidden;padding:0 16px;height:40px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;opacity:0;cursor:default;transition:visibility 250ms, opacity 250ms;pointer-events:none;}
 .xjDemo-body-result-nook:hover .xjDemo-body-result-nook-info, .xjDemo-body-result-nook-dragging .xjDemo-body-result-nook-info{visibility:visible;opacity:1;transition-delay:250ms;}
 
 .xjDemo-body-result-nook-wrap{position:absolute;top:0;left:0;overflow:hidden;width:14px;height:14px;}
-.xjDemo-body-result-nook-wrap-icon{position:absolute;top:-2px;left:8px;width:5px;height:24px;border:1px solid #999;box-shadow:1px 0 0 0 #fff inset, 1px 0 0 0 #fff;transform:rotate(45deg);}
+.xjDemo-body-result-nook-wrap-icon{position:absolute;top:-2px;left:8px;width:5px;height:24px;border:1px solid #999;transform:rotate(45deg);}
+
+html:not([class*="xj-base"]) .xjDemo-body-result-nook-wrap-icon{box-shadow:1px 0 0 0 #fff inset, 1px 0 0 0 #fff;}
+html[class~="xj-base-black"] .xjDemo-body-result-nook-wrap-icon{box-shadow:1px 0 0 0 #333 inset, 1px 0 0 0 #333;}
+
+html:root .xjDemo-white .xjDemo-body-result-nook-wrap-icon{box-shadow:1px 0 0 0 #fff inset, 1px 0 0 0 #fff;}
+html:root .xjDemo-black .xjDemo-body-result-nook-wrap-icon{box-shadow:1px 0 0 0 #333 inset, 1px 0 0 0 #333;}
 
 .xjDemo-pack-larger .xjDemo-body-result-nook{display:none;}
 .xjDemo-body-nowrap:not(.xjDemo-body-invert):not(.xjDemo-body-source-hidden) .xjDemo-body-result-nook{display:none;}
@@ -189,14 +211,21 @@ html:not(.xj-ripple-exist) .xjDemo-head-other-icon:active{background-color:#f0f0
 
 /* divide 分割线模块可以拖曳，以此改变模块的占比，border 必须要有背景色，不然在 IE 中会有 BUG */
 /* z-index 得低于 copy，否则横排会出现覆盖，横排时，height 得设置为 auto 才能实现高度自动拉伸 */
-.xjDemo-body-divide{position:relative;z-index:4;-ms-flex:0 0 auto;flex:0 0 auto;width:100%;height:1px;background-color:#ccc;}
+.xjDemo-body-divide{position:relative;z-index:4;-ms-flex:0 0 auto;flex:0 0 auto;width:100%;height:1px;}
+
+html:not([class*="xj-base"]) .xjDemo-body-divide{background-color:#ccc;}
+html[class~="xj-base-black"] .xjDemo-body-divide{background-color:#666;}
+
+html:root .xjDemo-white .xjDemo-body-divide{background-color:#ccc;}
+html:root .xjDemo-black .xjDemo-body-divide{background-color:#666;}
+
 .xjDemo-body-divide-border{position:absolute;top:-8px;right:16px;bottom:auto;left:0;width:auto;height:17px;background-color:#fff;opacity:0;cursor:row-resize;}
 
 .xjDemo-body-nowrap .xjDemo-body-divide{width:1px;height:auto;}
 .xjDemo-body-nowrap .xjDemo-body-divide-border{top:0;right:auto;bottom:16px;left:-8px;width:17px;height:auto;cursor:col-resize;}
 
-.xjDemo-body-divide-result{position:absolute;top:-48px;left:50%;visibility:hidden;padding:0 16px;height:40px;border-radius:4px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;opacity:0;cursor:default;transition:visibility 250ms, opacity 250ms;transform:translateX(-50%);pointer-events:none;}
-.xjDemo-body-divide-source{position:absolute;top:8px;left:50%;visibility:hidden;padding:0 16px;height:40px;border-radius:4px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;opacity:0;cursor:default;transition:visibility 250ms, opacity 250ms;transform:translateX(-50%);pointer-events:none;}
+.xjDemo-body-divide-result{position:absolute;top:-48px;left:50%;visibility:hidden;padding:0 16px;height:40px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;opacity:0;cursor:default;transition:visibility 250ms, opacity 250ms;transform:translateX(-50%);pointer-events:none;}
+.xjDemo-body-divide-source{position:absolute;top:8px;left:50%;visibility:hidden;padding:0 16px;height:40px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;opacity:0;cursor:default;transition:visibility 250ms, opacity 250ms;transform:translateX(-50%);pointer-events:none;}
 
 .xjDemo-body-nowrap .xjDemo-body-divide-result{top:50%;right:8px;left:auto;transform:translateY(-50%);}
 .xjDemo-body-nowrap .xjDemo-body-divide-source{top:50%;left:8px;transform:translateY(-50%);}
@@ -236,8 +265,8 @@ html:not(.xj-ripple-exist) .xjDemo-head-other-icon:active{background-color:#f0f0
 
 /* 这里的结构必须和 Prism 保持一致，有些样式不得不重复设置，是因为各种 theme 影响，不得不纠正 */
 /* 不用 xjDemo-body-source-wrap-code 类名，是因为异步时 code 动态生成，导致无法选中，只好妥协 */
-.xjDemo-body .xjDemo-body-source .xjDemo-body-source-wrap{position:relative;display:block;float:none;overflow:auto;margin:0;padding:16px;min-width:100%;min-height:100%;width:100%;height:100%;border:0;border-radius:0;box-shadow:none;text-align:left;white-space:pre;word-spacing:0;word-wrap:normal;word-break:normal;-moz-tab-size:4;tab-size:4;letter-spacing:0;font-size:16px;font-family:inherit;line-height:inherit;-webkit-overflow-scrolling:touch;}
-.xjDemo-body .xjDemo-body-source .xjDemo-body-source-wrap > code{position:static;display:inline;float:none;overflow:visible;margin:0;padding:0;border:0;border-radius:0;box-shadow:none;text-align:inherit;white-space:inherit;word-spacing:inherit;word-wrap:inherit;word-break:inherit;-moz-tab-size:inherit;tab-size:inherit;letter-spacing:inherit;font-size:inherit;font-family:inherit;line-height:inherit;}
+.xjDemo-body .xjDemo-body-source .xjDemo-body-source-wrap{position:relative;display:block;float:none;overflow:auto;margin:0;padding:16px;min-width:100%;min-height:100%;width:100%;height:100%;border:0;text-align:left;white-space:pre;word-spacing:0;word-wrap:normal;word-break:normal;-moz-tab-size:4;tab-size:4;letter-spacing:0;font-size:16px;font-family:inherit;line-height:inherit;-webkit-overflow-scrolling:touch;}
+.xjDemo-body .xjDemo-body-source .xjDemo-body-source-wrap > code{position:static;display:inline;float:none;overflow:visible;margin:0;padding:0;border:0;text-align:inherit;white-space:inherit;word-spacing:inherit;word-wrap:inherit;word-break:inherit;-moz-tab-size:inherit;tab-size:inherit;letter-spacing:inherit;font-size:inherit;font-family:inherit;line-height:inherit;}
 
 /* 没内容时，就用伪元素创建一个空格，否则 pre 有 min-height，但是还会出现 Flex 高度坍塌的 BUG */
 /* 后来发现是 Flex 渲染计算出了问题，一旦重新选择就没问题了，但空格占位符始终是最好的解决方法 */
@@ -250,11 +279,17 @@ html:not(.xj-ripple-exist) .xjDemo-head-other-icon:active{background-color:#f0f0
 /* IE 的 :active 选择器有问题，点住后无法让 info 显示出来，所以只能是改用类名控制 info 的显示 */
 .xjDemo-body-source-nook{position:absolute;right:0;bottom:0;-ms-flex:0 0 auto;flex:0 0 auto;width:16px;height:16px;background-color:transparent;cursor:ns-resize;}
 
-.xjDemo-body-source-nook-info{position:absolute;right:8px;bottom:8px;z-index:12;visibility:hidden;padding:0 16px;height:40px;border-radius:4px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;opacity:0;cursor:default;transition:visibility 250ms, opacity 250ms;pointer-events:none;}
+.xjDemo-body-source-nook-info{position:absolute;right:8px;bottom:8px;z-index:12;visibility:hidden;padding:0 16px;height:40px;background-color:rgba(0,0,0,0.75);color:#fff;white-space:nowrap;line-height:40px;opacity:0;cursor:default;transition:visibility 250ms, opacity 250ms;pointer-events:none;}
 .xjDemo-body-source-nook:hover .xjDemo-body-source-nook-info, .xjDemo-body-source-nook-dragging .xjDemo-body-source-nook-info{visibility:visible;opacity:1;transition-delay:250ms;}
 
 .xjDemo-body-source-nook-wrap{position:absolute;top:0;left:0;overflow:hidden;width:14px;height:14px;}
-.xjDemo-body-source-nook-wrap-icon{position:absolute;top:-2px;left:8px;width:5px;height:24px;border:1px solid #999;box-shadow:1px 0 0 0 #fff inset, 1px 0 0 0 #fff;transform:rotate(45deg);}
+.xjDemo-body-source-nook-wrap-icon{position:absolute;top:-2px;left:8px;width:5px;height:24px;border:1px solid #999;transform:rotate(45deg);}
+
+html:not([class*="xj-base"]) .xjDemo-body-source-nook-wrap-icon{box-shadow:1px 0 0 0 #fff inset, 1px 0 0 0 #fff;}
+html[class~="xj-base-black"] .xjDemo-body-source-nook-wrap-icon{box-shadow:1px 0 0 0 #333 inset, 1px 0 0 0 #333;}
+
+html:root .xjDemo-white .xjDemo-body-source-nook-wrap-icon{box-shadow:1px 0 0 0 #fff inset, 1px 0 0 0 #fff;}
+html:root .xjDemo-black .xjDemo-body-source-nook-wrap-icon{box-shadow:1px 0 0 0 #333 inset, 1px 0 0 0 #333;}
 
 .xjDemo-pack-larger .xjDemo-body-source-nook{display:none;}
 .xjDemo-body-nowrap.xjDemo-body-invert:not(.xjDemo-body-result-hidden) .xjDemo-body-source-nook{display:none;}
@@ -271,7 +306,7 @@ html:not(.xj-ripple-exist) .xjDemo-head-other-icon:active{background-color:#f0f0
 .xjDemo-body-source-exec-info{position:absolute;top:0;right:48px;visibility:hidden;white-space:nowrap;opacity:0;cursor:default;transition:visibility 250ms, opacity 250ms, transform 250ms;transform:translateX(-40px);pointer-events:none;}
 .xjDemo-body-source-exec-tips .xjDemo-body-source-exec-info{visibility:visible;opacity:1;transform:translateX(0);}
 
-.xjDemo-body-source-exec-info-back{position:absolute;width:100%;height:100%;border-radius:4px;background-color:#000;opacity:0.75;}
+.xjDemo-body-source-exec-info-back{position:absolute;width:100%;height:100%;background-color:#000;opacity:0.75;}
 .xjDemo-body-source-exec-done .xjDemo-body-source-exec-info-back{background-color:#0c3;opacity:1;}
 .xjDemo-body-source-exec-fail .xjDemo-body-source-exec-info-back{background-color:#f33;opacity:1;}
 
@@ -281,13 +316,24 @@ html:not(.xj-ripple-exist) .xjDemo-head-other-icon:active{background-color:#f0f0
 
 .xjDemo-body-source-exec-info-fore{position:relative;padding:0 16px;height:40px;color:#fff;line-height:40px;}
 
-.xjDemo-body-source-exec-icon{width:40px;height:40px;border:1px solid #ccc;border-radius:4px;background-color:#fff;color:#999;text-align:center;line-height:38px;opacity:0.25;cursor:pointer;transition:opacity 250ms;}
+.xjDemo-body-source-exec-icon{width:40px;height:40px;color:#999;text-align:center;line-height:38px;opacity:0.25;cursor:pointer;transition:opacity 250ms;}
+
+html:not([class*="xj-base"]) .xjDemo-body-source-exec-icon{border:1px solid #ccc;background-color:#fff;}
+html[class~="xj-base-black"] .xjDemo-body-source-exec-icon{border:1px solid #666;background-color:#333;}
+
+.xjDemo-white .xjDemo-body-source-exec-icon{border:1px solid #ccc;background-color:#fff;}
+.xjDemo-black .xjDemo-body-source-exec-icon{border:1px solid #666;background-color:#333;}
 
 .xjDemo-body-source:hover .xjDemo-body-source-exec-icon{opacity:0.5;}
 .xjDemo-body-source:focus .xjDemo-body-source-exec-icon{opacity:0.5;}
 .xjDemo-body-source:hover .xjDemo-body-source-exec-icon:hover{opacity:1;}
 
-html:not(.xj-ripple-exist) .xjDemo-body-source-exec-icon:active{background-color:#f0f0f0;}
+html:not(.xj-ripple-exist)html:not([class*="xj-base"]) .xjDemo-body-source-exec-icon:active{background-color:#f0f0f0;}
+html:not(.xj-ripple-exist)html[class~="xj-base-black"] .xjDemo-body-source-exec-icon:active{background-color:#242424;}
+
+html:not(.xj-ripple-exist):root .xjDemo-white .xjDemo-body-source-exec-icon:active{background-color:#242424;}
+html:not(.xj-ripple-exist):root .xjDemo-black .xjDemo-body-source-exec-icon:active{background-color:#242424;}
+
 .xjDemo-body-source-exec-icon .xj-ripple-element{opacity:0.5;}
 
 @supports (-moz-appearance:none) and (not (-moz-osx-font-smoothing:auto)){
@@ -320,15 +366,27 @@ html:not(.xj-ripple-exist) .xjDemo-body-source-exec-icon:active{background-color
 /* Inline Color ----------------------------------------------------------------------------- */
 
 /* outline 生成了最外层的边框，尺寸变成 14px*14px，但 outline 不占位置，margin 还是得设为 2px */
-.xjDemo-body .xjDemo-body-source span.inline-color-wrapper{margin:2px;width:12px;height:12px;outline:1px solid #ccc;border:1px solid #fff;vertical-align:-2px;}
+.xjDemo-body .xjDemo-body-source span.inline-color-wrapper{margin:2px;width:12px;height:12px;border:1px solid #fff;vertical-align:-2px;}
+
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source span.inline-color-wrapper{outline:1px solid #ccc;}
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source span.inline-color-wrapper{outline:1px solid #666;}
+
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source span.inline-color-wrapper{outline:1px solid #ccc;}
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source span.inline-color-wrapper{outline:1px solid #666;}
 
 
 
 /* Command Line ----------------------------------------------------------------------------- */
 
 /* 主要是修改边框的颜色，并且调整内外边距的内容，这个设置和 Line Numbers 插件的设置其实很相似 */
-.xjDemo-body .xjDemo-body-source .command-line-prompt{margin-right:16px;border-right-color:#ccc;}
+.xjDemo-body .xjDemo-body-source .command-line-prompt{margin-right:16px;}
 .xjDemo-body .xjDemo-body-source .command-line-prompt > span::before{padding-right:16px;}
+
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source .command-line-prompt{border-right-color:#ccc;}
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source .command-line-prompt{border-right-color:#666;}
+
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source .command-line-prompt{border-right-color:#ccc;}
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source .command-line-prompt{border-right-color:#666;}
 
 
 
@@ -345,7 +403,13 @@ html:not(.xj-ripple-exist) .xjDemo-body-source-exec-icon:active{background-color
 /* width:48px; - 原本就是 3em;，但基于 font-size 换算总是很麻烦，所以固定为 16px * 3em = 48px */
 /* background-color:transparent; - coldark-cold / coldark-dark 主题修改了背景色，这里重新纠正 */
 /* cursor:default; - IE10 不支持 pointer-events 属性，伪元素呈现 cursor:text 效果，得重设才行 */
-.xjDemo-body .xjDemo-body-source pre[class*="language-"].line-numbers .line-numbers-rows{top:16px;left:0;width:48px;border-right-color:#ccc;background-color:transparent;cursor:default;}
+.xjDemo-body .xjDemo-body-source pre[class*="language-"].line-numbers .line-numbers-rows{top:16px;left:0;width:48px;background-color:transparent;cursor:default;}
+
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source pre[class*="language-"].line-numbers .line-numbers-rows{border-right-color:#ccc;}
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source pre[class*="language-"].line-numbers .line-numbers-rows{border-right-color:#666;}
+
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source pre[class*="language-"].line-numbers .line-numbers-rows{border-right-color:#ccc;}
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source pre[class*="language-"].line-numbers .line-numbers-rows{border-right-color:#666;}
 
 /* padding-right:0;border-right:none; - 纠正 cb 主题修改的参数，code 还有 float:left;，得去掉 */
 /* xonokai 主题还会修改 code 的 display 为 block;，如果不纠正为 inline 则行号的定位将有些偏移 */
@@ -368,7 +432,7 @@ html:not(.xj-ripple-exist) .xjDemo-body-source-exec-icon:active{background-color
 /* height:auto; - xonokai 主题把 height 设置成了 1em;，结果导致高度异常，这里不得不重新再纠正 */
 /* content:attr(data-start); - prism-shades-of-purple 主题设置了 content:''，这里需要重新恢复 */
 /* cursor:default; - IE10 不支持 pointer-events 属性，伪元素呈现 cursor:text 效果，得重设才行 */
-.xjDemo-body .xjDemo-body-source .line-highlight::before, .xjDemo-body .xjDemo-body-source .line-highlight[data-end]::after{top:4px;left:8px;padding:2px 8px;height:auto;border-radius:8px;background-color:rgba(128, 128, 128, 0.395);box-shadow:none;color:#fff;content:attr(data-start);vertical-align:top;text-shadow:none;font-weight:normal;font-style:normal;font-size:12px;font-family:inherit;line-height:12px;cursor:default;}
+.xjDemo-body .xjDemo-body-source .line-highlight::before, .xjDemo-body .xjDemo-body-source .line-highlight[data-end]::after{top:4px;left:8px;padding:2px 8px;height:auto;border-radius:0;background-color:rgba(128, 128, 128, 0.395);box-shadow:none;color:#fff;content:attr(data-start);vertical-align:top;text-shadow:none;font-weight:normal;font-style:normal;font-size:12px;font-family:inherit;line-height:12px;cursor:default;}
 
 /* top:auto;bottom:4px;content:attr(data-end); - 原本的设置也是选择器权重过低，不得不重置一回 */
 /* content:none; - 原本也是这样的设置，有 line-numbers 时不显示的，但是权重过低，所以重新设置 */
@@ -414,24 +478,59 @@ html:not(.xj-ripple-exist) .xjDemo-body-source-exec-icon:active{background-color
 /* .toolbar-item > * */
 .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a,
 .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar span,
-.xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button{position:relative;display:inline-block;overflow:hidden;margin:0;padding:0 8px;min-height:20px;height:auto;border:1px solid #ccc;border-radius:4px;background-color:#fff;box-shadow:none;color:#333;vertical-align:top;text-decoration:none;text-transform:none;white-space:nowrap;font-weight:normal;font-style:normal;font-size:12px;font-family:inherit;line-height:18px;-webkit-appearance:none;}
+.xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button{position:relative;display:inline-block;overflow:hidden;margin:0;padding:0 8px;min-height:20px;height:auto;border-radius:0;box-shadow:none;vertical-align:top;text-decoration:none;text-transform:none;white-space:nowrap;font-weight:normal;font-style:normal;font-size:12px;font-family:inherit;line-height:18px;-webkit-appearance:none;}
+
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a,
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a,
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar span,
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar span,
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button,
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button{border:1px solid #ccc;background-color:#fff;color:#333;}
+
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a,
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a,
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar span,
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar span,
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button,
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button{border:1px solid #666;background-color:#333;color:#fff;}
 
 /* .toolbar-item > anchor */
 .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a{cursor:pointer;}
-html:not(.xj-device-touch) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a:hover{color:#333;text-decoration:underline;}
+html:not(.xj-device-touch) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a:hover{text-decoration:underline;}
+
+html:not(.xj-device-touch):not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a:hover{color:#333;}
+html:not(.xj-device-touch)[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a:hover{color:#fff;}
+
+html:not(.xj-device-touch):root .xjDemo-white .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a:hover{color:#333;}
+html:not(.xj-device-touch):root .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a:hover{color:#fff;}
 
 /* .toolbar-item > button */
 .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button{cursor:pointer;}
-html:not(.xj-device-touch) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:hover{background-color:#f0f0f0;}
 
-html:not(.xj-device-mouse) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:active{background-color:#f0f0f0;}
-html:not(.xj-device-touch):not(.xj-ripple-exist) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:not(.button-active):not(.input-active):active{background-color:#fff;}
+html:not(.xj-device-touch):not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:hover{background-color:#f0f0f0;}
+html:not(.xj-device-touch)[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:hover{background-color:#242424;}
+html:not(.xj-device-touch):root .xjDemo-white .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:hover{background-color:#f0f0f0;}
+html:not(.xj-device-touch):root .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:hover{background-color:#242424;}
+
+html:not(.xj-device-mouse):not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:active{background-color:#f0f0f0;}
+html:not(.xj-device-mouse)[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:active{background-color:#242424;}
+html:not(.xj-device-mouse):root .xjDemo-white .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:active{background-color:#f0f0f0;}
+html:not(.xj-device-mouse):root .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:active{background-color:#242424;}
+
+html:not(.xj-device-touch):not(.xj-ripple-exist):not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:not(.button-active):not(.input-active):active{background-color:#fff;}
+html:not(.xj-device-touch):not(.xj-ripple-exist)[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:not(.button-active):not(.input-active):active{background-color:#333;}
+html:not(.xj-device-touch):not(.xj-ripple-exist):root .xjDemo-white .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:not(.button-active):not(.input-active):active{background-color:#fff;}
+html:not(.xj-device-touch):not(.xj-ripple-exist):root .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:not(.button-active):not(.input-active):active{background-color:#333;}
 
 .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button::-moz-focus-inner{padding:0;border:0;}
 .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar .xj-focus-ontab:focus{outline:0;box-shadow:0 0 0 2px rgba(51,153,255,0.75);}
 html:not(.xj-focus-exist) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:focus{outline:0;box-shadow:0 0 0 2px rgba(51,153,255,0.75);}
 
-.xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:disabled{background-color:#f5f5f5;opacity:0.5;cursor:not-allowed;}
+.xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:disabled{opacity:0.5;cursor:not-allowed;}
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:disabled{background-color:#f5f5f5;}
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:disabled{background-color:#3d3d3d;}
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:disabled{background-color:#f5f5f5;}
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:disabled{background-color:#3d3d3d;}
 
 
 
@@ -459,7 +558,23 @@ html:not(.xj-focus-exist) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolb
 .xjDemo-body .xjDemo-body-source .token.treeview-part .entry-name.ext-doc::before, .xjDemo-body .xjDemo-body-source .token.treeview-part .entry-name.ext-docm::before, .xjDemo-body .xjDemo-body-source .token.treeview-part .entry-name.ext-docx::before{content:"\eada";}
 .xjDemo-body .xjDemo-body-source .token.treeview-part .entry-name.ext-pps::before, .xjDemo-body .xjDemo-body-source .token.treeview-part .entry-name.ext-ppt::before, .xjDemo-body .xjDemo-body-source .token.treeview-part .entry-name.ext-pptx::before{content:"\eadb";}
 
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::before,
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::before,
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v::before,
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v::before{border-color:#ccc;}
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v-last::before,
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v-last::before{border-color:#ccc;}
+html:not([class*="xj-base"]) .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::after,
+html:root .xjDemo-white .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::after{border-color:#ccc;}
 
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::before,
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::before,
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v::before,
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v::before{border-color:#666;}
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v-last::before,
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v-last::before{border-color:#666;}
+html[class~="xj-base-black"] .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::after,
+html:root .xjDemo-black .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::after{border-color:#666;}
 
 /* Previewers ------------------------------------------------------------------------------- */
 
@@ -495,94 +610,11 @@ html:not(.xj-focus-exist) .xjDemo-body .xjDemo-body-source.code-toolbar > .toolb
 .prism-previewer-time.flipped{margin-top:0;margin-bottom:-46px;}
 .prism-previewer-time.flipped::after{margin-bottom:2px;}
 
-.xjBase-dark .prism-previewer::before{box-shadow:0 0 4px rgba(0, 0, 0, 0.25) inset, 0 4px 8px rgba(255, 255, 255, 0.75);}
-.xjBase-dark .prism-previewer.flipped::before{box-shadow:0 0 4px rgba(0, 0, 0, 0.25) inset, 0 -4px 8px rgba(255, 255, 255, 0.75);}
+html[class~="xj-base-black"] .prism-previewer::before{box-shadow:0 0 4px rgba(0, 0, 0, 0.25) inset, 0 4px 8px rgba(255, 255, 255, 0.75);}
+html[class~="xj-base-black"] .prism-previewer.flipped::before{box-shadow:0 0 4px rgba(0, 0, 0, 0.25) inset, 0 -4px 8px rgba(255, 255, 255, 0.75);}
 
-.xjBase-dark .prism-previewer-gradient div{box-shadow:0 0 4px rgba(0, 0, 0, 0.25) inset, 0 4px 8px rgba(255, 255, 255, 0.75);}
-.xjBase-dark .prism-previewer-gradient.flipped div{box-shadow:0 0 4px rgba(0, 0, 0, 0.25) inset, 0 -4px 8px rgba(255, 255, 255, 0.75);}
+html[class~="xj-base-black"] .prism-previewer-gradient div{box-shadow:0 0 4px rgba(0, 0, 0, 0.25) inset, 0 4px 8px rgba(255, 255, 255, 0.75);}
+html[class~="xj-base-black"] .prism-previewer-gradient.flipped div{box-shadow:0 0 4px rgba(0, 0, 0, 0.25) inset, 0 -4px 8px rgba(255, 255, 255, 0.75);}
 */
-
-
-
-/* .xjBase-dark & .xjDemo-black ------------------------------------------------------------- */
-
-@media not print{
-
-/* xjDemo */
-.xjBase-dark .xjDemo-pack,
-.xjDemo-black{color:#fff;}
-
-.xjBase-dark .xjDemo-head,
-.xjDemo-black .xjDemo-head{border-color:#666;background-color:#333;}
-
-.xjBase-dark .xjDemo-head-other,
-.xjDemo-black .xjDemo-head-other{border-left-color:#666;}
-
-.xjBase-dark .xjDemo-body,
-.xjDemo-black .xjDemo-body{border-color:#666;background-color:#333;}
-
-.xjBase-dark .xjDemo-body-result-nook-wrap-icon,
-.xjDemo-black .xjDemo-body-result-nook-wrap-icon{box-shadow:1px 0 0 0 #333 inset, 1px 0 0 0 #333;}
-
-.xjBase-dark .xjDemo-body-divide,
-.xjDemo-black .xjDemo-body-divide{background-color:#666;}
-
-.xjBase-dark .xjDemo-body-source-nook-wrap-icon,
-.xjDemo-black .xjDemo-body-source-nook-wrap-icon{box-shadow:1px 0 0 0 #333 inset, 1px 0 0 0 #333;}
-
-.xjBase-dark .xjDemo-body-source-exec-icon,
-.xjDemo-black .xjDemo-body-source-exec-icon{border-color:#666;background-color:#333;}
-
-html:not(.xj-ripple-exist).xjBase-dark .xjDemo-body-source-exec-icon:active,
-html:not(.xj-ripple-exist) .xjDemo-black .xjDemo-body-source-exec-icon:active{background-color:#242424;}
-
-/* Inline Color */
-.xjBase-dark .xjDemo-body .xjDemo-body-source span.inline-color-wrapper,
-.xjDemo-black .xjDemo-body .xjDemo-body-source span.inline-color-wrapper{outline:1px solid #666;}
-
-/* Command Line */
-.xjBase-dark .xjDemo-body .xjDemo-body-source .command-line-prompt,
-.xjDemo-black .xjDemo-body .xjDemo-body-source .command-line-prompt{border-right-color:#666;}
-
-/* Line Numbers */
-.xjBase-dark .xjDemo-body .xjDemo-body-source pre[class*="language-"].line-numbers .line-numbers-rows,
-.xjDemo-black .xjDemo-body .xjDemo-body-source pre[class*="language-"].line-numbers .line-numbers-rows{border-right-color:#666;}
-
-/* Toolbar */
-.xjBase-dark .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a,
-.xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a,
-.xjBase-dark .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar span,
-.xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar span,
-.xjBase-dark .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button,
-.xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button{border-color:#666;background-color:#333;color:#fff;}
-
-html:not(.xj-device-touch).xjBase-dark .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a:hover,
-html:not(.xj-device-touch) .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar a:hover{color:#fff;}
-
-html:not(.xj-device-touch).xjBase-dark .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:hover,
-html:not(.xj-device-touch) .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:hover{background-color:#242424;}
-
-html:not(.xj-device-mouse).xjBase-dark .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:active,
-html:not(.xj-device-mouse) .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:active{background-color:#242424;}
-
-html:not(.xj-device-touch):not(.xj-ripple-exist).xjBase-dark .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:not(.button-active):not(.input-active):active,
-html:not(.xj-device-touch):not(.xj-ripple-exist) .xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:enabled:not(.button-active):not(.input-active):active{background-color:#333;}
-
-.xjBase-dark .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:disabled,
-.xjDemo-black .xjDemo-body .xjDemo-body-source.code-toolbar > .toolbar button:disabled{background-color:#3d3d3d;}
-
-/* Treeview */
-.xjBase-dark .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::before,
-.xjDemo-black .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::before,
-.xjBase-dark .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v::before,
-.xjDemo-black .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v::before{border-color:#666;}
-
-.xjBase-dark .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v-last::before,
-.xjDemo-black .xjDemo-body .xjDemo-body-source .token.treeview-part .line-v-last::before{border-color:#666;}
-
-.xjBase-dark .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::after,
-.xjDemo-black .xjDemo-body .xjDemo-body-source .token.treeview-part .line-h::after{border-color:#666;}
-
-}
 
 

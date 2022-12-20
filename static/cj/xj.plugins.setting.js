@@ -20,20 +20,20 @@ xj.storageOption['0.2.2'] = {};
 // xj.operate
 if(!xj.operateConfig){ xj.operateConfig = {} };
 if(!xj.operateOption){ xj.operateOption = {} };
-xj.operateConfig['0.5.0'] = {};
-xj.operateOption['0.5.0'] = {};
+xj.operateConfig['0.6.0'] = {};
+xj.operateOption['0.6.0'] = {};
 
 // xj.ripple
 if(!xj.rippleConfig){ xj.rippleConfig = {} };
 if(!xj.rippleOption){ xj.rippleOption = {} };
-xj.rippleConfig['0.3.2'] = {};
-xj.rippleOption['0.3.2'] = {};
+xj.rippleConfig['0.5.0'] = { defaultSelector : '.xj-ripple, .xj-ripple-out, .xjButton, button, .button', };
+xj.rippleOption['0.5.0'] = {};
 
 // xj.focus
 if(!xj.focusConfig){ xj.focusConfig = {} };
 if(!xj.focusOption){ xj.focusOption = {} };
-xj.focusConfig['0.3.2'] = { frameStyle : 'shadow', };
-xj.focusOption['0.3.2'] = {};
+xj.focusConfig['0.4.0'] = {};
+xj.focusOption['0.4.0'] = {};
 
 // xj.base
 if(!xj.baseConfig){ xj.baseConfig = {} };
@@ -53,7 +53,7 @@ if(!xj.Demo){ xj.Demo = {} };
 if(!xj.Demo.config){ xj.Demo.config = {} };
 if(!xj.Demo.option){ xj.Demo.option = {} };
 xj.Demo.config['0.1.0'] = {};
-xj.Demo.option['0.1.0'] = { tab2space : (/MSIE|Edge|Trident/i.test(navigator.userAgent) === true ? 4 : 0), };
+xj.Demo.option['0.1.0'] = { tab2space : (/MSIE|Trident|EDGE/i.test(navigator.userAgent) === true ? 4:0), };
 
 // xjScroll
 if(!xj.Scroll){ xj.Scroll = {} };

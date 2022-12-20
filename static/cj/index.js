@@ -79,6 +79,13 @@ var jqi_h2s = $('#pub_main').find('h2');
 jqi_h2s.each(function(){ this.id = 
 this.textContent.replace(/\s/g, '_') });
 
+// jqi_h2s.each(function(index, value){
+// 	index = index + 1;
+// 	if(index < 10){ index = '0' + index };
+// 	value.textContent = index+'. '+value.textContent;
+// 	value.id = value.textContent.replace(/\s/g, '_');
+// });
+
 // 用 pub_main 的 h2 生成 xjDir 导航中的 li 标签
 // 将 li 标签结构写到 jqi_xjDir01_ul01，并初始化
 var xjDirListHtml = '';
@@ -103,6 +110,13 @@ jqi_xjDir01_ul01.find('li > a').on('click', function(e){
 	var id = this.getAttribute('href').slice(1);
 	$('[id="'+ id +'"]').xjArrive([0,-80], 250);
 	location.hash = id;
+});
+
+// 点击 xjDir 最顶部的标题，会清空 hash 回到顶部
+// 用 pushState 因为 location.hash = '' 会残留 #
+$('#xjDir01_back_start_point').click(function(){
+	history.pushState({state : ''}, '', location.pathname);
+	$(document.scrollingElement).stop().animate({scrollTop:0}, 250);
 });
 
 
@@ -149,22 +163,41 @@ jqi_win.on('scroll resize', function(){
 
 // 用 window.matchMedia() 判断窗口宽度以控制侧边
 // 点击按钮展展开 xjDir 而点击遮罩或 li 则是关闭
-
 var jqi_pub_side = $('#pub_side');
-var metchMedia_mw1023 = window.matchMedia('(max-width:1023px)');
-jqi_win.on('resize', function(){ if(metchMedia_mw1023.matches 
-=== false){ jqi_pub_side.removeClass('pub_sideShow') } });
-
+jqi_win.on('resize', function(){ if(window.matchMedia(
+'(min-width:1024px)').matches){ jqi_pub_side.removeClass('pub_sideShow') } });
 $('#pub_toolSwitchDir').on('click', function(){ jqi_pub_side.addClass('pub_sideShow') });
 $('#pub_sideMask').on('click', function(){ jqi_pub_side.removeClass('pub_sideShow') });
 jqi_xjDir01_ul01.on('click', function(){ jqi_pub_side.removeClass('pub_sideShow') });
 
 // 点击右下角的按钮返回顶部，这里不能用 xjArrive
 // 因为顶部的 head 可能是 position:fixed; 定位的
-
 $('#pub_toolBackToTop').on('click', function(e){
 $(document.scrollingElement).stop().animate({scrollTop:0}, 250) });
 
 
 
+// ---------------------------------------------------------------------------------------------
+
+// 阻止 #pub_main 中锚点的默认事件，改为滚动定位
+// id 中可能存在非法符号，得使用属性选择器来选择
+$('#pub_main').on('click', 'a', function(e){
+	
+	var id = e.currentTarget.getAttribute('href');
+	if(/^#/.test(id) === false){ return }
+	else{ id = id.slice(1) };
+	
+	var jqi_idNode = $('[id="'+ id +'"]');
+	if(jqi_idNode.length !== 0){
+		e.preventDefault();
+		jqi_idNode.xjArrive([0,-80], 250);
+		location.hash = id;
+	};
+	
 });
+
+
+
+});
+
+
